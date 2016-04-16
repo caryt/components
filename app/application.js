@@ -1,5 +1,6 @@
 import React from 'react';
-import {Router, doDispatch, createStore} from 'app';
+import {Router} from './router';
+import {doDispatch, createStore} from './store';
 import {logger} from './logger';
 const log = logger('app');
 

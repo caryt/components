@@ -1,7 +1,7 @@
 import React from 'react';
-import * as Async from 'async';
-import {rest} from 'components/reducers/rest'
-import * as app from 'app';
+import * as Async from 'components/async/component';
+import {rest} from './reducers'
+import {resource as resource_dispatcher} from 'components/app/index';
 import {MOCK_NETWORK_DELAY} from 'config/environment';
 
 /** Interface to describe a RESTful API.
@@ -17,7 +17,7 @@ export const Rest = ({base, endpoint, completed, resource}) =>
     <Async.Component
         reducer = {rest}
         state = {{url: base.addPath(endpoint), ...resource}}
-        dispatcher = {app.resource}
+        dispatcher = {resource_dispatcher}
         duration = {MOCK_NETWORK_DELAY}
         completed = {completed}
     />;

@@ -1,6 +1,7 @@
-import React, * as ui from 'ui';
+import React from 'react';
+import {Icon} from './icon';
 
 export const Loading = ({action}) =>
     action.type
-        ? <ui.Icon fa="spinner" classes="fa-spin"/>
+        ? <Icon fa="spinner" classes="fa-spin"/>
         : null;

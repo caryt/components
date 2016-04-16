@@ -1,6 +1,6 @@
 import request from 'superagent';
 import {REQUEST_MOCK} from 'config/environment';
-import {logger} from 'app';
+import {logger} from 'components/app/index';
 const log = logger('db');
 
 /** Object representing a URL (Uniform Resource Location)

@@ -1,4 +1,4 @@
-import {URL, CREATE, READ, UPDATE, DELETE} from 'api';
+import {URL, CREATE, READ, UPDATE, DELETE} from './actions';
 
 export function rest(state, action) {
     const {url, ...keys} = state;

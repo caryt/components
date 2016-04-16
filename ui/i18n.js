@@ -1,5 +1,5 @@
 import React from 'react';
-import {i18n as i18n} from 'app';
+import {i18n} from 'components/app/index';
 
 export const I18n = ({children, domain, context, plural, ...args}) => {
     const list = Object.keys(args).map(k => args[k]);
