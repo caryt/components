@@ -1,13 +1,7 @@
 import request from 'superagent';
-import mock from 'superagent-mock';
 import {REQUEST_MOCK} from 'config/environment';
-import {Mock} from 'mock';
 import {logger} from 'app';
 const log = logger('db');
-
-if (REQUEST_MOCK) {
-    mock(request, Mock);
-}
 
 /** Object representing a URL (Uniform Resource Location)
  *  @example example = new URL('http://example.com')
