@@ -1,6 +1,6 @@
 import React from 'react';
 import {ATTACH_COMPONENTS_TO_DOM} from 'config/environment';
-import {logger} from 'components/app/index';
+import {logger} from 'components/index';
 const log = logger('pages');
 
 export class Page extends React.Component {

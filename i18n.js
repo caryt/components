@@ -1,7 +1,7 @@
 /** Internationization (i18n) helpers
 **/
 import Jed from 'jed';
-import {logger} from './logger';
+import {logger} from 'components/logger';
 const log = logger('i18n');
 import {LOCALE_DATA} from 'config/environment';
 

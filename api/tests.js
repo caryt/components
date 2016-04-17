@@ -1,4 +1,4 @@
-import {URL} from './url';
+import {URL} from 'components/index';
 import {DATABASE_URL as base} from 'config/environment';
 import React from 'react';
 import ReactDOM from 'react-dom';

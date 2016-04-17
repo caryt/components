@@ -1,6 +1,6 @@
 import React from 'react';
 import {dispatch} from 'components/app/store';
-import {logger} from 'components/app/index';
+import {logger} from 'components/index';
 const log = logger('async');
 
 export class Component extends React.Component {

@@ -8,6 +8,6 @@ export * from './forms';
 export * from './grid';
 export * from './i18n';
 export * from './icon';
-export * from './page';
 export * from './loading';
 export * from './nav';
+export * from './page';

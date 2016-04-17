@@ -3,8 +3,8 @@
 import React from 'react';
 import {Router as ReactRouter, browserHistory} from 'react-router';
 import {ATTACH_COMPONENTS_TO_DOM} from 'config/environment';
-import {configureLoggers, Application, i18n} from 'components/app/index';
-import {logger} from './logger';
+import {i18n, Application, configureLoggers} from 'components/index';
+import {logger} from 'components/logger';
 const log = logger('app');
 
 

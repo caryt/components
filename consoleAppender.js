@@ -17,7 +17,7 @@ const isLevel = (event, level) =>
 
 const UNGROUPED = 'font-weight:bold';
 
-export default class ConsoleAppender {
+export class ConsoleAppender {
     initialize() {
     }
 
