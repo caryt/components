@@ -46,7 +46,7 @@ export const dispatch = (_action, fn=action) => {
 /** Immediately dispatch an action.
 **/
 export const doDispatch = (...args) =>
-    dispatch(...args)();
+    _dispatcher(...args);
 
 export const action = {
     dispatcher: (component, action, args) =>
@@ -62,6 +62,3 @@ export const resource = {
     dispatcher: (component, action, _error, result) =>
         _dispatcher(action, _error ? {_error} : result)
 };
-
-
-
