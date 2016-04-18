@@ -42,7 +42,9 @@ export const doDispatch = (action, args) => {
 **/
 export const dispatch = (_action, fn=action) => {
     const {dispatcher, ...args} = fn;
-    return dispatcher.bind(null, null, _action, ...args);
+    return dispatcher === undefined
+        ? doDispatch(_action, args)
+        : dispatcher.bind(null, null, _action, ...args);
 }
 
 /** The default dispatcher that simply passes args as the new state.
