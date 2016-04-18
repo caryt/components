@@ -6,7 +6,7 @@
  **/
 import React from 'react';
 import * as Redux from 'redux';
-import {logger} from 'components/logger';
+import {logger} from 'components/index';
 const log = logger('store');
 
 const EXTENSION = (createStore) =>

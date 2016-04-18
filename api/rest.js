@@ -1,7 +1,7 @@
 import React from 'react';
 import * as Async from 'components/async/component';
 import {rest} from './reducers'
-import {resource as resource_dispatcher} from 'components/app/store';
+import {resource as resource_dispatcher} from 'components/index';
 import {MOCK_NETWORK_DELAY} from 'config/environment';
 
 /** Interface to describe a RESTful API.

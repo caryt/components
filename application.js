@@ -1,7 +1,6 @@
 import React from 'react';
-import {Router} from 'components/index';
-import {doDispatch, createStore} from 'components/app/store';
-import {logger} from 'components/logger';
+import {Router, doDispatch, createStore} from 'components/index';
+import {logger} from 'components/index';
 const log = logger('app');
 
 /** A renderer that renders nothing - produces no output

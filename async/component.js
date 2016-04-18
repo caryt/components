@@ -1,5 +1,5 @@
 import React from 'react';
-import {dispatch} from 'components/app/store';
+import {dispatch} from 'components/index';
 import {logger} from 'components/index';
 const log = logger('async');
 

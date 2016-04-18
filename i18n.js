@@ -1,9 +1,9 @@
 /** Internationization (i18n) helpers
 **/
 import Jed from 'jed';
-import {logger} from 'components/logger';
-const log = logger('i18n');
 import {LOCALE_DATA} from 'config/environment';
+import {logger} from 'components/index';
+const log = logger('i18n');
 
 /** Helper function to concisely translate string literals.
  *  @example i`The quick brown fox`

@@ -4,7 +4,7 @@ import React from 'react';
 import {Router as ReactRouter, browserHistory} from 'react-router';
 import {ATTACH_COMPONENTS_TO_DOM} from 'config/environment';
 import {i18n, Application, configureLoggers} from 'components/index';
-import {logger} from 'components/logger';
+import {logger} from 'components/index';
 const log = logger('app');
 
 
