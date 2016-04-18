@@ -1,5 +1,5 @@
 import React from 'react';
-import {Router, doDispatch, createStore} from 'components/index';
+import {Router, doDispatch, createStore, config} from 'components/index';
 import {logger} from 'components/index';
 const log = logger('app');
 
@@ -15,12 +15,12 @@ const event = new Event('input', { bubbles: true });
 
 export class Application {
     constructor(options) {
+        config.state = options.config;
         this.name = options.name || 'application';
         this.reducers = options.reducers || {};
         this.routes = options.routes || [];
         this.renderer = options.renderer || nullRenderer;
         this.root = document.getElementById(options.root || 'root');
-        this.config = options.config || [];
         this.forEach(options.actions, (name, action) => this[name] = action);
         log.info(`initialize application ${this.name}`, this);
     }

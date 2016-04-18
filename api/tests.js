@@ -1,5 +1,7 @@
 import {URL} from 'components/index';
-import {DATABASE_URL as base} from 'config/environment';
+//We need this directly from the external config definition,
+//as tests don't use the full configuration file
+import * as CONFIG from 'config/environment';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as actions from './actions';
@@ -16,7 +18,8 @@ describe('Aan is a RESTful interface to a back-end system.', () => {
         describe('asynchronously it', () => {
             let result;
             beforeEach(done => {
-                const url = new URL(({id}) => `${base}/id/${id}`);
+                const url = new URL(({id}) =>
+                    `${CONFIG.DATABASE_URL}/id/${id}`);
                 url.get({id: 123}).end((error, representation) => {
                     result = {error, representation};
                     done()
@@ -33,7 +36,8 @@ describe('Aan is a RESTful interface to a back-end system.', () => {
     describe('It implements a RESTful inteface - that', () => {
         let representation;
         beforeEach(done => {
-            const url = new URL(({id}) => `${base}/id/${id}`);
+            const url = new URL(({id}) =>
+                `${CONFIG.DATABASE_URL}/id/${id}`);
             representation = rest({url, id: '987'}, actions.READ)
                 .end((error, result) => {
                     representation = {error, result};

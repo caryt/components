@@ -1,5 +1,5 @@
 import React from 'react';
-import {ATTACH_COMPONENTS_TO_DOM} from 'config/environment';
+import {config} from 'components/index';
 import {logger} from 'components/index';
 const log = logger('pages');
 
@@ -16,7 +16,7 @@ export class Page extends React.Component {
      *      page = $('#root')[0].page
     **/
     componentDidMount() {
-        if (ATTACH_COMPONENTS_TO_DOM) {
+        if (config.ATTACH_COMPONENTS_TO_DOM) {
             document.querySelector('#root').page = this;
         }
     }

@@ -1,7 +1,8 @@
 /** Internationization (i18n) helpers
 **/
 import Jed from 'jed';
-import {LOCALE_DATA} from 'config/environment';
+//We need this directly from the external config definition,
+import * as CONFIG from 'config/environment';
 import {logger} from 'components/index';
 const log = logger('i18n');
 
@@ -24,5 +25,5 @@ export var i18n = new Jed({
             domain: locale_data,
         })
     },
-    locale_data: LOCALE_DATA,
+    locale_data: CONFIG.LOCALE_DATA,
 });

@@ -2,7 +2,9 @@ import React from 'react';
 import * as Async from 'components/async/component';
 import {rest} from './reducers'
 import {resource as resource_dispatcher} from 'components/index';
-import {MOCK_NETWORK_DELAY} from 'config/environment';
+//We need this directly from the external config definition,
+//as tests don't use the full configuration file
+import * as CONFIG from 'config/environment';
 
 /** Interface to describe a RESTful API.
  *  @param {Object} %0.base The base URL for this API.
@@ -18,6 +20,6 @@ export const Rest = ({base, endpoint, completed, resource}) =>
         reducer = {rest}
         state = {{url: base.addPath(endpoint), ...resource}}
         dispatcher = {resource_dispatcher}
-        duration = {MOCK_NETWORK_DELAY}
+        duration = {CONFIG.MOCK_NETWORK_DELAY}
         completed = {completed}
     />;

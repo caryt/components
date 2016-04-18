@@ -2,8 +2,7 @@
 **/
 import React from 'react';
 import {Router as ReactRouter, browserHistory} from 'react-router';
-import {ATTACH_COMPONENTS_TO_DOM} from 'config/environment';
-import {i18n, Application, configureLoggers} from 'components/index';
+import {config} from 'components/index';
 import {logger} from 'components/index';
 const log = logger('app');
 
@@ -16,20 +15,6 @@ const nullConfiguration = {LOG_CONFIGURATION: {}};
 /** Router
 **/
 export class Router extends React.Component{
-    /** Initialize the Logging and Internationalization subsystems.
-    **/
-    setConfig(config=nullConfiguration) {
-        configureLoggers(config.LOG_CONFIGURATION);
-        log.info('set Configuration', config);
-        log.info(`set i18n Domain: "${i18n.options.domain}"`, i18n);
-    }
-
-    App(app) {
-        this.setConfig(app.config);
-        this.app = new Application(app);
-        return this.app;
-    }
-
     render() {
         const {routes} = this.props;
         return <ReactRouter
@@ -42,7 +27,7 @@ export class Router extends React.Component{
      *      page = $('#root')[0].app
     **/
     addDebugging() {
-        if (ATTACH_COMPONENTS_TO_DOM) {
+        if (config.ATTACH_COMPONENTS_TO_DOM) {
             document.querySelector('#root').app = this.props.app;
         }
     }

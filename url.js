@@ -1,5 +1,4 @@
 import request from 'superagent';
-import {REQUEST_MOCK} from 'config/environment';
 import {logger} from 'components/index';
 const log = logger('db');
 

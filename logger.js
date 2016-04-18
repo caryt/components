@@ -2,8 +2,7 @@
 **/
 
 import * as Log4js from 'log4js';
-import {ConsoleAppender} from 'components/index';
-import {LOG_CONFIGURATION} from 'config/environment';
+import {config, ConsoleAppender} from 'components/index';
 
 export const logger = Log4js.getLogger;
 
