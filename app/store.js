@@ -29,13 +29,15 @@ export function createStore({reducers, listener}) {
     return store;
 }
 
-const _dispatcher = (action, args) => {
+/** Immediately dispatch an action.
+**/
+export const doDispatch = (action, args) => {
     log.debug(`dispatch ${action.type}`, args);
     store.dispatch({...action, ...args});
     log.trace('new state', store.state);
 }
 
-/** Generic Dispatch function to dispatch any action.
+/** Generic Dispatch function to return a function that dispatches any action.
     Defaults to dispatching a standard action if no additional details provided
 **/
 export const dispatch = (_action, fn=action) => {
@@ -43,22 +45,26 @@ export const dispatch = (_action, fn=action) => {
     return dispatcher.bind(null, null, _action, ...args);
 }
 
-/** Immediately dispatch an action.
+/** The default dispatcher that simply passes args as the new state.
 **/
-export const doDispatch = (...args) =>
-    _dispatcher(...args);
-
 export const action = {
     dispatcher: (component, action, args) =>
-        _dispatcher(action, {}, args)
+        doDispatch(action, {}, args)
 };
 
+/** A dispatcher that receives an event in args and passes on its value.
+ *  Designed to use with text input boxes.
+**/
 export const event = {
     dispatcher: (component, action, event) =>
-        _dispatcher(action, {value: event.target.value})
+        doDispatch(action, {value: event.target.value})
 };
 
+/** A dispatcher that receives a HTTP response in args and passes on the
+ *  response. For convience the response values are spead.
+ *  Designed to use with HHTP request library, i.e. superagent.
+**/
 export const resource = {
     dispatcher: (component, action, _error, result) =>
-        _dispatcher(action, _error ? {_error} : result)
+        doDispatch(action, _error ? {_error} : result)
 };
