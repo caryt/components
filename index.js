@@ -11,5 +11,6 @@ export * from './config'
 export * from './consoleAppender';
 export * from './consoleReporter';
 export * from './router';
+export * from './script';
 export * from './store';
 export * from './url';
