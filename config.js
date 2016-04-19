@@ -1,5 +1,5 @@
-import {i18n, configureLoggers} from 'components/index';
-import {logger} from 'components/index';
+import {i18n, configureLoggers} from 'reframed/index';
+import {logger} from 'reframed/index';
 const log = logger('config');
 
 /** A minimal configuration file.

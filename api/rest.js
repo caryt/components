@@ -1,7 +1,7 @@
 import React from 'react';
-import * as Async from 'components/async/component';
+import * as Async from 'reframed/async/component';
 import {rest} from './reducers'
-import {resource as resource_dispatcher} from 'components/index';
+import {resource as resource_dispatcher} from 'reframed/index';
 //We need this directly from the external config definition,
 //as tests don't use the full configuration file
 import * as CONFIG from 'config/environment';

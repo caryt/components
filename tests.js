@@ -1,1 +1,1 @@
-export * from 'components/api/tests';
+export * from 'reframed/api/tests';

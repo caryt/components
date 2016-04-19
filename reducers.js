@@ -1,1 +1,1 @@
-export * from 'components/api/reducers';
+export * from 'reframed/api/reducers';

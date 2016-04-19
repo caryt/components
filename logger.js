@@ -2,7 +2,7 @@
 **/
 
 import * as Log4js from 'log4js';
-import {config, ConsoleAppender} from 'components/index';
+import {config, ConsoleAppender} from 'reframed/index';
 
 export const logger = Log4js.getLogger;
 

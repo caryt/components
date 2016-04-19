@@ -3,7 +3,7 @@
 import Jed from 'jed';
 //We need this directly from the external config definition,
 import * as CONFIG from 'config/environment';
-import {logger} from 'components/index';
+import {logger} from 'reframed/index';
 const log = logger('i18n');
 
 /** Helper function to concisely translate string literals.

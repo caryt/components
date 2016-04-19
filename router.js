@@ -2,8 +2,8 @@
 **/
 import React from 'react';
 import {Router as ReactRouter, browserHistory} from 'react-router';
-import {config} from 'components/index';
-import {logger} from 'components/index';
+import {config} from 'reframed/index';
+import {logger} from 'reframed/index';
 const log = logger('app');
 
 

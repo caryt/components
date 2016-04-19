@@ -1,1 +1,1 @@
-export * from 'components/api/actions';
+export * from 'reframed/api/actions';

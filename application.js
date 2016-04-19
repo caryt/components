@@ -1,6 +1,6 @@
 import React from 'react';
-import {Router, doDispatch, createStore, config} from 'components/index';
-import {logger} from 'components/index';
+import {Router, doDispatch, createStore, config} from 'reframed/index';
+import {logger} from 'reframed/index';
 const log = logger('app');
 
 /** A renderer that renders nothing - produces no output

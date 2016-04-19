@@ -1,6 +1,6 @@
 import React from 'react';
-import {config} from 'components/index';
-import {logger} from 'components/index';
+import {config} from 'reframed/index';
+import {logger} from 'reframed/index';
 const log = logger('pages');
 
 export class Page extends React.Component {

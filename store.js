@@ -6,7 +6,7 @@
  **/
 import React from 'react';
 import * as Redux from 'redux';
-import {logger} from 'components/index';
+import {logger} from 'reframed/index';
 const log = logger('store');
 
 const EXTENSION = (createStore) =>

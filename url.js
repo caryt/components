@@ -1,5 +1,5 @@
 import request from 'superagent';
-import {logger} from 'components/index';
+import {logger} from 'reframed/index';
 const log = logger('db');
 
 /** Object representing a URL (Uniform Resource Location)

@@ -1,6 +1,6 @@
 import React from 'react';
-import {dispatch} from 'components/index';
-import {logger} from 'components/index';
+import {dispatch} from 'reframed/index';
+import {logger} from 'reframed/index';
 const log = logger('async');
 
 export class Component extends React.Component {
