@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom';
 import * as actions from './actions';
 import {rest} from './reducers';
 
-describe('Aan is a RESTful interface to a back-end system.', () => {
+describe('Rest is a RESTful interface to a back-end system.', () => {
     describe('It implements a URL (a Uniform Resource Location) that', () => {
 
         it('is constructed with a function describing the url', () => {
