@@ -12,7 +12,7 @@ import {resource as resource_dispatcher, config} from 'reframed/index';
  *  e.g. <Rest base={URL('example.com')} endpoint='id/{id}' completed=UPDATE resource={id:1}/>
  *  returns an object that can be used to perform RESTful operations on example.com/id/1.
 **/
-export const Rest = ({base, endpoint, completed, resource}) =>
+export const Resource = ({base, endpoint, completed, resource}) =>
     <Async.Component
         reducer = {rest}
         state = {{url: base.addPath(endpoint), ...resource}}
