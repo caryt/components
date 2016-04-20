@@ -25,14 +25,12 @@ export class Application {
     }
 
     listener() {
-        //Note this is bound to app when this is called.
-        //(See runApplication(), above)
+        this.render(<Router routes = {this.routes} app = {this} />); 
+    }
+
+    render(component) {
         const {renderer, root} = config;
-        const router = <Router
-            routes = {this.routes}
-            app = {this}
-        />;
-        renderer.render(router, root)
+        renderer.render(component, root)
     }
 
     forEach(obj, fn = (k, v) => ([k, v])) {
