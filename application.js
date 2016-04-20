@@ -20,7 +20,7 @@ export class Application {
         this.reducers = options.reducers || {};
         this.routes = options.routes || [];
         this.renderer = options.renderer || nullRenderer;
-        this.root = document.getElementById(options.root || 'root');
+        this.root = document.getElementById(config.PAGE_ROOT);
         this.forEach(options.actions, (name, action) => this[name] = action);
         log.info(`initialize application ${this.name}`, this);
     }

@@ -17,7 +17,7 @@ export class Page extends React.Component {
     **/
     componentDidMount() {
         if (config.ATTACH_COMPONENTS_TO_DOM) {
-            document.querySelector('#root').page = this;
+            document.querySelector(`#${config.PAGE_ROOT}`).page = this;
         }
     }
 }

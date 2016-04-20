@@ -1,6 +1,4 @@
 import {URL} from 'reframed/index';
-//We need this directly from the external config definition,
-//as tests don't use the full configuration file
 import * as CONFIG from 'config/environment';
 import React from 'react';
 import ReactDOM from 'react-dom';

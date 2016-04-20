@@ -28,7 +28,7 @@ export class Router extends React.Component{
     **/
     addDebugging() {
         if (config.ATTACH_COMPONENTS_TO_DOM) {
-            document.querySelector('#root').app = this.props.app;
+            document.querySelector(`#${config.PAGE_ROOT}`).app = this.props.app;
         }
     }
 

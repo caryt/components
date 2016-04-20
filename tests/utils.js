@@ -1,5 +1,6 @@
 import React from 'react';
 import {deepFreeze} from './deepFreeze';
+import {config} from 'reframed/index';
 import renderer from 'react-dom';
 
 export function reduce(reducer, before, action) {
@@ -10,4 +11,4 @@ export const $ = selector =>
     document.querySelector(selector);
 
 export const renderPage = Page =>
-    renderer.render(<Page/>, $('#root'));
+    renderer.render(<Page/>, $(`#${config.PAGE_ROOT}`));
