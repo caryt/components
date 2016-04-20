@@ -10,7 +10,7 @@ export const Nav =({brand, children}) =>
                   <span className="icon-bar"></span>
                   <span className="icon-bar"></span>
                 </button>
-                <a className="navbar-brand" href="#">{brand}</a>
+                {brand}
             </div>
             <div id="navbar" className="navbar-collapse collapse">
                 <form className="navbar-form navbar-right">
