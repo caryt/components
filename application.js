@@ -3,11 +3,6 @@ import {Router, doDispatch, createStore, config} from 'reframed/index';
 import {logger} from 'reframed/index';
 const log = logger('app');
 
-/** A renderer that renders nothing - produces no output
- *  For example, this could exclude the entire UI when testing reducers.
-**/
-const nullRenderer = {render: () => false};
-
 /** React uses synthetic events, change events on input boxes actually
  *  listen for this event, not $.trigger('change')
  **/
@@ -19,8 +14,6 @@ export class Application {
         this.name = options.name || 'application';
         this.reducers = options.reducers || {};
         this.routes = options.routes || [];
-        this.renderer = options.renderer || nullRenderer;
-        this.root = document.getElementById(config.PAGE_ROOT);
         this.forEach(options.actions, (name, action) => this[name] = action);
         log.info(`initialize application ${this.name}`, this);
     }
@@ -34,9 +27,9 @@ export class Application {
     listener() {
         //Note this is bound to app when this is called.
         //(See runApplication(), above)
-        const {renderer, root, routes} = this;
+        const {renderer, root} = config;
         const router = <Router
-            routes = {routes}
+            routes = {this.routes}
             app = {this}
         />;
         renderer.render(router, root)
