@@ -5,15 +5,15 @@ export const Container = ({children, fluid}) =>
         {children}
     </div>
 
-export const Row = ({children}) =>
-    <div className="row">
+export const Row = ({className='', children}) =>
+    <div className={`row ${className}`}>
         {children}
     </div>
 
 export class Col extends React.Component {
     render () {
-        const {cols, children} = this.props;
-        return <div className={this.classes(cols)}>
+        const {cols, className='', children} = this.props;
+        return <div className={`${this.classes(cols)} ${className}`}>
             {children}
         </div>
     }
