@@ -70,3 +70,8 @@ export const resource = {
     dispatcher: (component, action, _error, result) =>
         doDispatch(action, _error ? {_error} : result)
 };
+
+export const recharts = {
+    dispatcher: (component, action, entry, index, event) =>
+        doDispatch(action, entry)
+}
