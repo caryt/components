@@ -4,14 +4,12 @@ import {PieChart, Pie, Cell} from 'recharts';
 export class PieValue extends React.Component {
 	constructor() {
 		super();
-		this.state = {menuVisibility: 'hide'};
+		this.state = {menuVisible: 'hide'};
 	}
 
 	toggleMenu() {
-		const {menuVisibility} = this.state;
-		this.setState({
-			menuVisibility: (menuVisibility === 'show') ? 'hide' : 'show'
-		});
+		const {menuVisible} = this.state;
+		this.setState({menuVisible: toggleVisible(menuVisible)});
 	}
 
 	selectMenu(...args) {
@@ -21,7 +19,7 @@ export class PieValue extends React.Component {
 
 	render() {
 		const {Menu, value} = this.props;
-		const {menuVisibility} = this.state;
+		const {menuVisible} = this.state;
 		const {toggleMenu, selectMenu} = this;
 		return <div className = "pie-value">
 			<span className="value" onClick = {toggleMenu.bind(this)}>
@@ -29,7 +27,7 @@ export class PieValue extends React.Component {
 			</span>
 			{React.cloneElement(
 				Menu, {
-					menuVisibility, 
+					menuVisible, 
 					onClick: selectMenu.bind(this),
 					toggleVisibility: toggleMenu.bind(this),
 				}
@@ -40,12 +38,10 @@ export class PieValue extends React.Component {
 
 export class PieMenu extends React.Component {
 	render() {
-		const {onClick, children, width=100, height=100,
-			startAngle=0, endAngle=360,  menuVisibility} = this.props;
+		const {onClick, children, width=100, height=100, menuVisible} = this.props;
 		const {renderLabels, renderMenu, renderBackground} = this;
-		return <div className = {`pie-menu ${menuVisibility}`}>
-		    <PieChart width={width} height={height} 
-		     startAngle={startAngle} endAngle={endAngle}> 
+		return <div className = {`pie-menu ${menuVisible}`}>
+		    <PieChart width={width} height={height}> 
 		        {renderBackground}
 		        {renderLabels}
 		        {renderMenu}
@@ -54,21 +50,24 @@ export class PieMenu extends React.Component {
     }
 
 	get renderBackground() {
-		const {children, cx, cy} = this.props;
+		const {children, cx, cy, startAngle} = this.props;
 		return <Pie data = {children} cx = {cx} cy = {cy}  
-         innerRadius = "50%" outerRadius = "100%" isAnimationActive={false}>
+		 isAnimationActive={false} className="pie-background" 
+	     startAngle={startAngle} endAngle={360+startAngle} 
+         innerRadius = "50%" outerRadius = "100%">
 			{renderCells({
 				children, 
 				stroke: 'darkgrey', 
-				fill: '#FDD44F'
+				fill: 'white'
 			})}
 	    </Pie>;
 	}
 
 	get renderMenu() {
-		const {onClick, children, cx, cy} = this.props;
+		const {onClick, children, cx, cy, startAngle} = this.props;
 		return <Pie data = {children} cx = {cx} cy = {cy}  
-         onClick = {onClick}
+	     startAngle={startAngle} endAngle={360+startAngle} 
+         onClick = {onClick}  className="pie-menuItems"
          innerRadius = "50%" outerRadius = "100%" isAnimationActive={false}>
 			{renderCells({
 				children, 
@@ -79,11 +78,12 @@ export class PieMenu extends React.Component {
 	}
 
 	get renderLabels() {
-		const {toggleVisibility, children, cx, cy} = this.props;
+		const {toggleVisibility, children, cx, cy, startAngle} = this.props;
 		return <Pie data = {children} cx = {cx} cy = {cy}  
-		 onClick = {toggleVisibility}
+	     startAngle={startAngle} endAngle={360+startAngle} 
+		 onClick = {toggleVisibility} className="pie-legend"
 		 labelLine = {false} label = {label}
-		 innerRadius = "0%" outerRadius = "50%" isAnimationActive={false}>
+		 innerRadius = "0%" outerRadius = "33%" isAnimationActive={false}>
 			{renderCells({
 				children, 
 				stroke: 'transparent', 
@@ -92,6 +92,9 @@ export class PieMenu extends React.Component {
 	    </Pie>;	
 	}
 }
+
+const toggleVisible = flag => 
+	(flag === 'show') ? 'hide' : 'show';
 
 const label = ({x, y, label}) =>
 	<text font-family='Arial' x={x} y={y}> {label} </text>;
