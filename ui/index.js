@@ -13,3 +13,4 @@ export * from './loading';
 export * from './nav';
 export * from './page';
 export * from './piemenu';
+export * from './tabs';
