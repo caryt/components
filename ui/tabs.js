@@ -5,7 +5,8 @@ export const Tabs = ({children}) =>
         {children}
     </ul>;
 
-export const Tab = ({children, id, active, className=''}) => {
+export const Tab = ({children, id, tab, active, className=''}) => {
+    const isActive = tab ? (tab === id) : active;
     const classes = `${Active(active)} ${className}`;
     return <li role="presentation" className={classes}>
         <a href={`#${id}`} aria-controls={id} role="tab" data-toggle="tab">
@@ -14,13 +15,22 @@ export const Tab = ({children, id, active, className=''}) => {
     </li>;
 }
 
+export const TabLink = ({children, LinkTo, id, tab, active, className=''}) => {
+    const isActive = tab ? (tab === id) : active;
+    const classes = `${Active(isActive)} ${className}`;
+    return <li role="presentation" className={classes}>
+        <LinkTo tab={id} name={children}/> 
+    </li>;
+}
+
 export const Panels = ({children}) =>
 	<div className="tab-content">
 		{children}
 	</div>;
 
-export const Panel = ({children, id, active}) => {
-    const classes = `tab-pane ${Active(active)}`;
+export const Panel = ({children, id, tab, active}) => {
+    const isActive = tab ? (tab === id) : active;
+    const classes = `tab-pane ${Active(isActive)}`;
     return <div role="tabpanel" className={classes} id={id}>
         {children}
     </div>
