@@ -2,12 +2,10 @@
  *  Displays objects so they can be browsed and inspected in the console.
  *  Entries are nicely formatted and expandable for easy inspection.
 **/
-import {Appender} from 'log4js';
-
 const keys = obj =>
     Object.keys(obj);
 
-const forEach = (obj, fn = f=>f) =>
+const forEach = (obj, fn = f => f) =>
     keys(obj).reduce((result, key) => {
         fn(key, obj[key]);
     }, obj);
@@ -15,14 +13,12 @@ const forEach = (obj, fn = f=>f) =>
 const isLevel = (event, level) =>
     event.level.toString().search(level) !== -1;
 
-const UNGROUPED = 'font-weight:bold';
-
 export class ConsoleAppender {
     initialize() {
     }
 
     style(event) {
-       if (isLevel(event, /FATAL/)) {
+        if (isLevel(event, /FATAL/)) {
             return 'color:darkred; font-size:large';
         } else if (isLevel(event, /ERROR/)) {
             return 'color:red';
@@ -34,9 +30,8 @@ export class ConsoleAppender {
             return 'color:blue';
         } else if (isLevel(event, /TRACE/)) {
             return 'color:lightgray; font-size:smaller';
-        } else {
-            return 'color:black';
         }
+        return 'color:black';
     }
 
     doAppend(event) {
@@ -44,26 +39,25 @@ export class ConsoleAppender {
         const obj = event.exception || '';
         const style = this.style(event);
         if (typeof obj === 'string') {
-            console.log('%c%s %s %s', `${style}`, //${UNGROUPED}`,
+            console.log('%c%s %s %s', `${style}`,
                 event.categoryName, event.message, event.exception);
-        }
-        else {
+        } else {
             console.groupCollapsed(
                 '%c%s %s', style, event.categoryName, event.message);
             if (isLevel(level, /ERROR/)) {
-                forEach(obj, (k,v) => console.error('%c%s %o', style, k, v));
+                forEach(obj, (k, v) => console.error('%c%s %o', style, k, v));
             } else if (isLevel(level, /FATAL/)) {
-                forEach(obj, (k,v) => console.error('%c%s %o', style, k, v));
+                forEach(obj, (k, v) => console.error('%c%s %o', style, k, v));
             } else if (isLevel(level, /WARN/)) {
-                forEach(obj, (k,v) => console.warn('%c%s %o', style, k, v));
+                forEach(obj, (k, v) => console.warn('%c%s %o', style, k, v));
             } else if (isLevel(level, /DEBUG/)) {
-                forEach(obj, (k,v) => console.debug('%c%s %o', style, k, v));
+                forEach(obj, (k, v) => console.debug('%c%s %o', style, k, v));
             } else if (isLevel(level, /INFO/)) {
-                forEach(obj, (k,v) => console.info('%c%s %o', style, k, v));
+                forEach(obj, (k, v) => console.info('%c%s %o', style, k, v));
             } else if (isLevel(level, /TRACE/)) {
-                forEach(obj, (k,v) => console.trace('%c%s %o', style, k, v));
+                forEach(obj, (k, v) => console.trace('%c%s %o', style, k, v));
             } else {
-                forEach(obj, (k,v) => console.log('%c%s %o', style, k, v));
+                forEach(obj, (k, v) => console.log('%c%s %o', style, k, v));
             }
             console.groupEnd();
         }

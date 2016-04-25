@@ -1,5 +1,5 @@
 import request from 'superagent';
-import {logger} from 'reframed/index';
+import { logger } from 'reframed/index';
 const log = logger('db');
 
 /** Object representing a URL (Uniform Resource Location)
@@ -11,7 +11,7 @@ export class URL {
         this._url = url;
     }
 
-    url(keys=this, options={}) {
+    url(keys = this, options = {}) {
         return (typeof this._url === 'function')
             ? this._url(keys)
             : this._url;
@@ -27,7 +27,7 @@ export class URL {
 
     /** GET's the resource at this URL.
     **/
-    get(options={}) {
+    get(options = {}) {
         const url = this.url(options);
         log.debug('GET', url);
         return request.get(url);

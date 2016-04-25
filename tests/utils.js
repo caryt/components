@@ -1,6 +1,6 @@
 import React from 'react';
-import {deepFreeze} from './deepFreeze';
-import {config} from 'reframed/index';
+import { deepFreeze } from './deepFreeze';
+import { config } from 'reframed/index';
 
 /** This is used to test reducers.
  *  It resurively freezes the before state so that
@@ -20,6 +20,6 @@ export const $ = selector =>
   * It is the same rendering logic used by the application to render pages.
 **/
 export const testComponent = component => {
-        const {renderer, root} = config;
-        renderer.render(component, root);
-    };
+    const { renderer, root } = config;
+    renderer.render(component, root);
+};

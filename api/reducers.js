@@ -1,20 +1,22 @@
-import {URL, CREATE, READ, UPDATE, DELETE} from './actions';
+import { URL, CREATE, READ, UPDATE, DELETE } from './actions';
 
 export function rest(state, action) {
-    const {url, ...keys} = state;
+    const { url, ...keys} = state;
     switch (action) {
-        case CREATE:
-            return post(url, keys);
-        case READ:
-            return get(url, keys);
-        case UPDATE:
-            return put(url, keys);
-        case DELETE:
-            return delete(url, keys);
+    case CREATE:
+        return post(url, keys);
+    case READ:
+        return get(url, keys);
+    case UPDATE:
+        return put(url, keys);
+    case DELETE:
+        return delete(url, keys);
+    default:
+        throw 'Unknown action';
     }
 }
 
-function get(url, keys, options={}) {
+function get(url, keys, options = {}) {
     return url.get(keys)
         .set('Access-Control-Allow-Origin', 'http://localhost:8000')
         .set('Content-Type', 'application/x-amz-json-1.0')

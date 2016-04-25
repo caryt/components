@@ -1,26 +1,18 @@
 /** Router - Top Level React component
 **/
 import React from 'react';
-import {Router as ReactRouter, browserHistory} from 'react-router';
-import {config} from 'reframed/index';
-import {logger} from 'reframed/index';
-const log = logger('app');
-
-
-/** A minimal configuration file.
- *  Contains a default LOG_CONFIGURATION which will log all events.
-**/
-const nullConfiguration = {LOG_CONFIGURATION: {}};
+import { Router as ReactRouter, browserHistory } from 'react-router';
+import { config } from 'reframed/index';
 
 /** Router
 **/
-export class Router extends React.Component{
-    render() {
-        const {routes} = this.props;
-        return <ReactRouter
-            history = {browserHistory}
-            routes = {routes}
-        />
+export class Router extends React.Component {
+    componentDidMount() {
+        this.addDebugging();
+    }
+
+    componentDidUpdate() {
+        this.addDebugging();
     }
 
     /** Access the app in Chrome Console with:
@@ -32,12 +24,12 @@ export class Router extends React.Component{
         }
     }
 
-    componentDidUpdate() {
-        this.addDebugging();
-    }
-
-    componentDidMount() {
-        this.addDebugging();
+    render() {
+        const { routes } = this.props;
+        return <ReactRouter
+          history={browserHistory}
+          routes={routes}
+        />;
     }
 }
 

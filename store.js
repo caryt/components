@@ -6,13 +6,14 @@
  **/
 import React from 'react';
 import * as Redux from 'redux';
-import {logger} from 'reframed/index';
+import { logger } from 'reframed/index';
 const log = logger('store');
 
-const EXTENSION = (createStore) =>
+const EXTENSION = createStore => (
     window.devToolsExtension
         ? window.devToolsExtension()(createStore)
-        : createStore;
+        : createStore
+);
 
 /** Global (singleton) variable exposing the store.
  *  This enables easy access to the application state without passing it around.
@@ -21,9 +22,9 @@ export var store = null;
 
 /** createStore ...
 **/
-export function createStore({reducers, listener}) {
+export function createStore({ reducers, listener }) {
     store = EXTENSION(Redux.createStore)(Redux.combineReducers(reducers));
-    Object.defineProperty(store, 'state', {get: () => store.getState()});
+    Object.defineProperty(store, 'state', { get: () => store.getState() });
     store.subscribe(listener);
     listener();
     return store;
@@ -35,14 +36,14 @@ export const doDispatch = (action, args) => {
     log.debug(`dispatch ${action.type}`, args);
     store.dispatch({...action, ...args});
     log.trace('new state', store.state);
-}
+};
 
 /** Generic Dispatch function to return a function that dispatches any action.
     Defaults to dispatching a standard action if no additional details provided
 **/
-export const dispatch = (_action, fn=action) => {
+export const dispatch = (_action, fn = action) => {
     const {dispatcher, ...args} = fn;
-    return dispatcher === undefined
+    return (dispatcher === undefined)
         ? doDispatch(_action, args)
         : dispatcher.bind(null, null, _action, ...args);
 }
@@ -51,7 +52,7 @@ export const dispatch = (_action, fn=action) => {
 **/
 export const action = {
     dispatcher: (component, action, args) =>
-        doDispatch(action, {}, args)
+        doDispatch(action, {}, args),
 };
 
 /** A dispatcher that receives an event in args and passes on its value.
@@ -59,7 +60,7 @@ export const action = {
 **/
 export const event = {
     dispatcher: (component, action, event) =>
-        doDispatch(action, {value: event.target.value})
+        doDispatch(action, { value: event.target.value }),
 };
 
 /** A dispatcher that receives a HTTP response in args and passes on the
@@ -68,10 +69,10 @@ export const event = {
 **/
 export const resource = {
     dispatcher: (component, action, _error, result) =>
-        doDispatch(action, _error ? {_error} : result)
+        doDispatch(action, _error ? { _error } : result),
 };
 
 export const recharts = {
     dispatcher: (component, action, entry, index, event) =>
-        doDispatch(action, entry)
-}
+        doDispatch(action, entry),
+};
