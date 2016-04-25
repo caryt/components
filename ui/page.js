@@ -3,7 +3,7 @@ import {config} from 'reframed/index';
 import {logger} from 'reframed/index';
 const log = logger('pages');
 
-export class Page extends React.Component {
+export class PageComponent extends React.Component {
     componentWillMount() {
         log.info(`mount ${this.props.title}`, this);
     }
