@@ -1,5 +1,6 @@
 import { i18n, configureLoggers, logger } from 'reframed/index';
 import renderer from 'react-dom';
+import { forEach } from './functional';
 const log = logger('config');
 
 /** A minimal configuration file.
@@ -30,8 +31,8 @@ class Config {
         configureLoggers(config.LOG_CONFIGURATION);
         log.info('set Configuration', config);
         const parsed = this.parse(config);
-        Object.keys(parsed).forEach(key => {
-            this[key] = parsed[key];
+        forEach(parsed, (key, value) => {
+            this[key] = value;
         });
         log.info(`set i18n Domain: "${i18n.options.domain}"`, i18n);
     }

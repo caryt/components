@@ -1,4 +1,5 @@
 import React from 'react';
+import { map } from 'reframed/index';
 
 export const Container = ({ children, fluid }) =>
     <div className={fluid ? 'container-fluid' : 'container'}>
@@ -15,8 +16,8 @@ export class Col extends React.Component {
         if (typeof cols === 'number') {
             return `col-xs-${cols}`;
         }
-        return Object.keys(cols).map(media =>
-            `col-${media}-${cols[media]}`
+        return map(cols, (key, value) =>
+            `col-${key}-${value}`
         ).join(' ');
     }
 

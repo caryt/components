@@ -1,8 +1,8 @@
 /** Logger module
 **/
-
 import * as Log4js from 'log4js';
 import { ConsoleAppender } from 'reframed/index';
+import { forEach } from './functional';
 
 export const logger = Log4js.getLogger;
 
@@ -25,7 +25,7 @@ const configureLogger = (category, config) => {
 **/
 export const configureLoggers = config => {
     logger('app').debug('configureLogger', config);
-    Object.keys(config).forEach(k =>
-        configureLogger(k, config)
-    )
+    forEach(config, key =>
+        configureLogger(key, config)
+    );
 };

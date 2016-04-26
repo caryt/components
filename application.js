@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, doDispatch, createStore, config, logger }
+import { Router, doDispatch, createStore, config, logger, forEach }
     from 'reframed/index';
 const log = logger('app');
 
@@ -14,8 +14,8 @@ export class Application {
         this.name = options.name || 'application';
         this.reducers = options.reducers || {};
         this.routes = options.routes || [];
-        this.forEach(options.actions, (name, action) => {
-            this[name] = action;
+        forEach(options.actions, (key, value) => {
+            this[key] = value;
         });
         log.info(`initialize application ${this.name}`, this);
     }
@@ -33,10 +33,6 @@ export class Application {
     render(component) {
         const { renderer, root } = config;
         renderer.render(component, root);
-    }
-
-    forEach(obj, fn = (k, v) => ([k, v])) {
-        Object.keys(obj).forEach(item => fn(item, obj[item]));
     }
 
     setInput(id, value) {

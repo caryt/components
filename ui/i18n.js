@@ -1,8 +1,8 @@
 import React from 'react';
-import { i18n } from 'reframed/index';
+import { i18n, map } from 'reframed/index';
 
 export const I18n = ({ children, domain, context, plural, ...args }) => {
-    const list = Object.keys(args).map(k => args[k]);
+    const list = map(args, (key, value) => value);
     return <span>
         {
             i18n.translate(children)

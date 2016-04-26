@@ -2,13 +2,7 @@
  *  Displays objects so they can be browsed and inspected in the console.
  *  Entries are nicely formatted and expandable for easy inspection.
 **/
-const keys = obj =>
-    Object.keys(obj);
-
-const forEach = (obj, fn = f => f) =>
-    keys(obj).reduce((result, key) => {
-        fn(key, obj[key]);
-    }, obj);
+import { forEach } from './functional';
 
 const isLevel = (event, level) =>
     event.level.toString().search(level) !== -1;
