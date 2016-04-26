@@ -1,4 +1,6 @@
 import React from 'react';
+import 'bootstrap-datepicker';
+import { Icon } from './icon';
 
 const FormGroup = ({ label, children, id }) =>
     <div className="form-group">
@@ -13,7 +15,7 @@ export class Input extends React.Component {
     }
 
     render() {
-        const { label, children, id = 'x', ...props } = this.props; // TODO: Determine id how???
+        const { label, children, id = '', ...props } = this.props;
         return <FormGroup label={label} id={id}>
             <input className="form-control" id={id} {...props} />
             {children}
@@ -21,7 +23,33 @@ export class Input extends React.Component {
     }
 }
 
-export const Value = ({ label, value, id = 'x' }) => // TODO: Determine id how???
+export class Datepicker extends React.Component {
+    constructor() {
+        super();
+        this.state = { value: '' };
+    }
+
+    render() {
+        const { label, children, id = '', ...props } = this.props;
+        return <FormGroup label={label} id={id}>
+            <div className="input-group date">
+                <input
+                  className="form-control" id={id} type="text"
+                  data-provide="datepicker"
+                  data-date-autoclose
+                  data-date-today-highlight
+                  data-date-show-on-focus={false}
+                  data-date-format="dd/mm/yyyy"
+                  {...props}
+                />
+                <span className="input-group-addon"><Icon fa="calendar" /></span>
+                {children}
+            </div>
+        </FormGroup>;
+    }
+}
+
+export const Value = ({ label, value, id = '' }) =>
     <FormGroup label={label} id={id}>
         <span className="form-control" id={id}>{value}</span>
     </FormGroup>;
