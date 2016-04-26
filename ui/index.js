@@ -2,7 +2,6 @@ import React from 'react';
 
 export default React;
 
-export * from './application';
 export * from './donut';
 export * from './error';
 export * from './forms';
