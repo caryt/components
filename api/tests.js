@@ -1,13 +1,10 @@
 import { URL } from 'reframed/index';
 import * as CONFIG from 'config/environment';
-import React from 'react';
-import ReactDOM from 'react-dom';
 import * as actions from './actions';
 import { rest } from './reducers';
 
 describe('Resource is a RESTful interface to a back-end system.', () => {
     describe('It implements a URL (a Uniform Resource Location) that', () => {
-
         it('is constructed with a function describing the url', () => {
             const url = new URL(({ id }) => `id/${id}`);
             expect(url.url({ id: 1 })).toEqual('id/1');
