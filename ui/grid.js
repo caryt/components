@@ -1,13 +1,13 @@
 import React from 'react';
 import { map } from 'reframed/index';
 
-export const Container = ({ children, fluid }) =>
-    <div className={fluid ? 'container-fluid' : 'container'}>
+export const Container = ({ children, fluid, id = null }) =>
+    <div id={id} className={fluid ? 'container-fluid' : 'container'}>
         {children}
     </div>;
 
-export const Row = ({ className = '', children }) =>
-    <div className={`row ${className}`}>
+export const Row = ({ className = '', children, id = null}) =>
+    <div id={id} className={`row ${className}`}>
         {children}
     </div>;
 
@@ -22,8 +22,8 @@ export class Col extends React.Component {
     }
 
     render() {
-        const { cols, className = '', children } = this.props;
-        return <div className={`${this.classes(cols)} ${className}`}>
+        const { cols, className = '', children, id = null } = this.props;
+        return <div id={id} className={`${this.classes(cols)} ${className}`}>
             {children}
         </div>;
     }

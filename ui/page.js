@@ -21,6 +21,9 @@ export class PageComponent extends React.Component {
     }
 
     render() {
-        return null;
+        const { children } = this.props;
+        return <div>
+            {children}
+        </div>;
     }
 }

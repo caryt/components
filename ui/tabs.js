@@ -24,12 +24,12 @@ export const Tab = ({ children, id, tab, active, className = '' }) => {
 };
 
 export const TabLink = ({
-    children, Page, id, tab, active, className = '',
+    children, Link, id, tab, active, className = '',
 }) => {
     const isActive = tab ? (tab === id) : active;
     const classes = `${hasActive(isActive)} ${className}`;
     return <li role="presentation" className={classes}>
-        <Page tab={id} name={children} />
+        <Link tab={id} name={children} />
     </li>;
 };
 
