@@ -6,8 +6,8 @@ export const Container = ({ children, fluid, id = null }) =>
         {children}
     </div>;
 
-export const Row = ({ className = '', children, id = null}) =>
-    <div id={id} className={`row ${className}`}>
+export const Row = ({ className = '', children, id = null, title = ''}) =>
+    <div id={id} className={`row ${className}`} data-title={title}>
         {children}
     </div>;
 
