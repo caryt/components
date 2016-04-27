@@ -14,10 +14,10 @@ export class PageComponent extends React.Component {
         if (config.ATTACH_COMPONENTS_TO_DOM) {
             document.querySelector(`#${config.PAGE_ROOT}`).page = this;
         }
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        document.title = prevProps.title;
+        const { title } = this.props;
+        if (title) {
+            document.title = title;
+        }
     }
 
     render() {
