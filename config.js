@@ -10,6 +10,7 @@ const nullConfiguration = {
     LOG_CONFIGURATION: {},
     RENDERER: 'REACT',
     PAGE_ROOT: 'root',
+    LOCALES: {},
 };
 
 /** Available renderers.
@@ -34,6 +35,7 @@ class Config {
         forEach(parsed, (key, value) => {
             this[key] = value;
         });
+        log.info(`set Locale: "${this.LOCALE}"`, this.locale);
         log.info(`set i18n Domain: "${i18n.options.domain}"`, i18n);
     }
 
@@ -43,6 +45,21 @@ class Config {
             renderer: RENDERER[config.RENDERER],
             root: document.getElementById(config.PAGE_ROOT),
         };
+    }
+
+    /** Holds localised configuration settings for the application
+     * The actual locale used is based on the config.LOCALE option.
+    **/
+    get locale() {
+        return this.LOCALES[this.LOCALE];
+    }
+
+    get language() {
+        return this.locale.split('-')[0];
+    }
+
+    get region() {
+        return this.locale.split('-')[1];
     }
 }
 

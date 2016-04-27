@@ -1,6 +1,7 @@
 import React from 'react';
 import 'bootstrap-datepicker';
 import { Icon } from './icon';
+import { config } from 'reframed/index';
 
 const FormGroup = ({ label, children, id }) =>
     <div className="form-group">
@@ -30,19 +31,25 @@ export class Datepicker extends React.Component {
     }
 
     render() {
-        const { label, children, id = '', ...props } = this.props;
+        const { 
+            label, children, id = '', placeholder = null, ...props 
+        } = this.props;
+        const { dateFormat } = config.locale;
         return <FormGroup label={label} id={id}>
             <div className="input-group date">
                 <input
                   className="form-control" id={id} type="text"
+                  placeholder={placeholder || dateFormat}
                   data-provide="datepicker"
                   data-date-autoclose
                   data-date-today-highlight
                   data-date-show-on-focus={false}
-                  data-date-format="dd/mm/yyyy"
+                  data-date-format={ dateFormat }
                   {...props}
                 />
-                <span className="input-group-addon"><Icon fa="calendar" /></span>
+                <span className="input-group-addon">
+                    <Icon fa="calendar" />
+                </span>
                 {children}
             </div>
         </FormGroup>;
