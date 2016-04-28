@@ -34,7 +34,7 @@ export function createStore({ reducers, listener }) {
 **/
 export const doDispatch = (action, args) => {
     log.debug(`dispatch ${action.type}`, args);
-    store.dispatch({...action, ...args});
+    store.dispatch({...args, ...action});
     log.trace('new state', store.state);
 };
 
@@ -68,8 +68,8 @@ export const event = {
  *  Designed to use with HHTP request library, i.e. superagent.
 **/
 export const resource = {
-    dispatcher: (component, action, _error, result) =>
-        doDispatch(action, _error ? { _error } : result),
+    dispatcher: (component, action, error, response) =>
+        doDispatch(action, {...response.body, error, response}),
 };
 
 export const recharts = {

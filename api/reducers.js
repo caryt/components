@@ -18,9 +18,5 @@ export function rest(state, action) {
 
 function get(url, keys, options = {}) {
     return url.get(keys)
-        .set('Access-Control-Allow-Origin', 'http://localhost:8000')
-        .set('Content-Type', 'application/x-amz-json-1.0')
-        .set('Authorization', 'XXX')
-        .set('x-amz-date', '20130315T092054Z')
-        .set('x-amz-target', 'DynamoDB_20120810.CreateTable');
+        .set('Content-Type', 'application/json');
 }

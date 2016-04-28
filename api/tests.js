@@ -23,7 +23,7 @@ describe('Resource is a RESTful interface to a back-end system.', () => {
 
             it('GET\'s the resource at the URL', () => {
                 expect(result.error).toEqual(null);
-                expect(result.representation.id).toEqual('123');
+                expect(result.representation.body.id).toEqual('123');
             });
         });
     });
@@ -45,7 +45,7 @@ describe('Resource is a RESTful interface to a back-end system.', () => {
         // });
 
         it('Read\'s a resource', () => {
-            expect(representation.result.id) // FIXME - Additional expectations needed
+            expect(representation.result.body.id) // FIXME - Additional expectations needed
                 .toEqual('987');
         });
 
