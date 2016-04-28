@@ -15,3 +15,5 @@ export * from './router';
 export * from './script';
 export * from './store';
 export * from './url';
+
+export { spread } from './api/reducers';

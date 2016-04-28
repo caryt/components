@@ -17,9 +17,22 @@ export const map = (obj, fn) =>
         fn(key, value)
     );
 
-/** forEach(obj, fn) returns applies fn over each [key, value] in obj
+/** forEach(obj, fn) applies fn over each [key, value] in obj
 **/
 export const forEach = (obj, fn) =>
     entries(obj).forEach(([key, value]) =>
         fn(key, value)
     );
+
+/** filter(obj, fn) returns an object with the key/values filtered by fn.
+**/
+export const filter = (obj, fn) => {
+    const result = {};
+    entries(obj).reduce((result, [key, value]) => {
+        if (fn(key, value)) {
+            result[key] = value;
+        }
+        return result;
+    }, result);
+    return result;
+};
