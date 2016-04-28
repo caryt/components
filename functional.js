@@ -2,6 +2,8 @@
  *
 **/
 
+import React from 'react';
+
 /** entries(obj) returns an array of [key, value] items over the objects keys
 **/
 export const entries = obj =>
@@ -36,3 +38,8 @@ export const filter = (obj, fn) => {
     }, result);
     return result;
 };
+
+export const cloneElements = (children, props) =>
+    React.Children.map(children, child =>
+        React.cloneElement(child, props)
+    );
