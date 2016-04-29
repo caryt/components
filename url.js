@@ -1,6 +1,6 @@
 import request from 'superagent';
 import { logger } from 'reframed/index';
-const log = logger('db');
+const log = logger('url');
 
 /** Object representing a URL (Uniform Resource Location)
  *  @example example = new URL('http://example.com')
