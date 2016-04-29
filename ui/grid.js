@@ -6,25 +6,21 @@ export const Container = ({ children, fluid, id = null }) =>
         {children}
     </div>;
 
-export const Row = ({ className = '', children, id = null, title = ''}) =>
-    <div id={id} className={`row ${className}`} data-title={title}>
+export const Row = ({ className = '', children, title = '', ...rest }) =>
+    <div className={`row ${className}`} data-title={title} { ...rest }>
         {children}
     </div>;
 
-export class Col extends React.Component {
-    classes(cols) {
-        if (typeof cols === 'number') {
-            return `col-xs-${cols}`;
-        }
-        return map(cols, (key, value) =>
-            `col-${key}-${value}`
-        ).join(' ');
+const classes = (cols) => {
+    if (typeof cols === 'number') {
+        return `col-xs-${cols}`;
     }
+    return map(cols, (key, value) =>
+        `col-${key}-${value}`
+    ).join(' ');
+};
 
-    render() {
-        const { cols, className = '', children, id = null } = this.props;
-        return <div id={id} className={`${this.classes(cols)} ${className}`}>
-            {children}
-        </div>;
-    }
-}
+export const Col = ({ cols, className = '', children, ...rest }) =>
+    <div className={`${classes(cols)} ${className}`} { ...rest }>
+        {children}
+    </div>;
