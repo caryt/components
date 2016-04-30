@@ -5,3 +5,9 @@ export const CREATE = { type: 'CREATE' };
 export const READ = { type: 'READ' };
 export const UPDATE = { type: 'UPDATE' };
 export const DELETE = { type: 'DELETE' };
+
+/** Create and return a new action called `name` **/
+export const create = name => (
+    { type: name }
+);
+
