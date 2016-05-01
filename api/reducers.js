@@ -9,7 +9,8 @@ function get(url, keys, completed, options = {}) {
 
 function put(url, keys, completed, options = {}) {
     const result = url.put(keys)
-        .set('Content-Type', 'application/json');
+        .set('Accept', 'application/json')
+        .send(keys);
     result.completed = completed;
     return result;
 }
