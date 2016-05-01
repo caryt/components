@@ -11,8 +11,8 @@ export class Component extends React.Component {
     }
 
     render() {
-        const { completed, reducer, duration, state, dispatcher } = this.props;
-        const { action } = state;
+        const { reducer, duration, state, dispatcher } = this.props;
+        const { action, completed } = state;
         const onCompleted = dispatch(completed, dispatcher);
         const delayedCompleted = this.delay(duration, onCompleted);
         if (action.type) {

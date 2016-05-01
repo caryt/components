@@ -12,8 +12,20 @@ export class Model {
         forEach(props, (key, value) => { this[key] = value; });
     }
 
+    static get CREATE_MODEL() {
+        return actions.create(`CREATE_${this.name}`);
+    }
+
     static get READ_MODEL() {
         return actions.create(`READ_${this.name}`);
+    }
+
+    static get UPDATE_MODEL() {
+        return actions.create(`UPDATE_${this.name}`);
+    }
+
+    static get DELETE_MODEL() {
+        return actions.create(`DELETE_${this.name}`);
     }
 
     static get CHANGE_MODEL() {
@@ -55,6 +67,27 @@ export class Model {
                 ...this.INITIAL_STATE,
                 id: action.value,
                 action: actions.READ,
+                completed: this.CHANGE_MODEL,
+            });
+        case this.UPDATE_MODEL.type:
+            return new this({
+                ...state,
+                ...this.INITIAL_STATE,
+                id: action.value,
+                action: actions.UPDATE,
+            });
+        case this.DELETE_MODEL.type:
+            return new this({
+                ...state,
+                ...this.INITIAL_STATE,
+                id: action.value,
+                action: actions.READ,
+            });
+        case this.CREATE_MODEL.type:
+            return new this({
+                ...state,
+                ...this.INITIAL_STATE,
+                action: actions.NONE,
             });
         default:
             return state;
@@ -91,7 +124,11 @@ export class Model {
     static reduceList(state = this.INITIAL_LIST_STATE, action) {
         switch (action.type) {
         case this.LIST_MODELS.type:
-            return { ...state, action: actions.READ };
+            return {
+                ...state,
+                action: actions.READ,
+                completed: this.POPULATE_MODELS,
+            };
         case this.POPULATE_MODELS.type:
             return {
                 ...state,

@@ -32,4 +32,28 @@ export class URL {
         log.debug('GET', url);
         return request.get(url);
     }
+
+    /** PUT's the resource at this URL.
+    **/
+    put(options = {}) {
+        const url = this.url(options);
+        log.debug('PUT', url);
+        return request.put(url);
+    }
+
+    /** POST's the resource at this URL.
+    **/
+    post(options = {}) {
+        const url = this.url(options);
+        log.debug('POST', url);
+        return request.post(url);
+    }
+
+    /** DELETE's the resource at this URL.
+    **/
+    delete(options = {}) {
+        const url = this.url(options);
+        log.debug('DELETE', url);
+        return request.delete(url);
+    }
 }
