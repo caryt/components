@@ -1,15 +1,69 @@
 import * as actions from 'reframed/actions';
 import { filter, forEach } from 'reframed/functional';
 
+/* A BaseModel encapsulates Business Logic.
+ * Subclass and add getter functions to calculate derived fields.
+**/
+
+class BaseModel {
+    constructor(props) {
+        forEach(props, (key, value) => { this[key] = value; });
+    }
+
+    /** INITIAL_STATE defines the inital values for all fields in the model.
+     *  This method must be overridden in subclasses.
+    **/
+    static get INITIAL_STATE() {
+        return {};
+    }
+
+    /** LABELS defines the display labels for all fields in the model.
+     *  This method must be overridden in subclasses.
+    **/
+    static get LABELS() {
+        return {};
+    }
+
+    static revive(state) {
+        return new this(state);
+    }
+
+    static reviveList(models) {
+        return models.map(model => this.revive(model));
+    }
+}
+
 /* A Model encapsulates Business Logic and are typically used in reducers that
  * return state from an external API.
  *
  * Subclass and add getter functions to calculate derived fields.
- * Reducers can return Model instances rather than simple mappings.
+ * Reducers will return Model instances rather than simple mappings.
 **/
-export class Model {
-    constructor(props) {
-        forEach(props, (key, value) => { this[key] = value; });
+export class Model extends BaseModel {
+
+    /** strategy defines the state transitions for each action in the Model.
+     *  As these are async actions there is a next action and then
+     *  a subsequent action to be called on completion of the action.
+     *
+     *  This method is soley to isolate this logic into a single place :-)
+    **/
+    static strategy(action) {
+        switch (action.type) {
+        case this.CREATE_MODEL.type:
+            return { action: actions.NONE };
+        case this.READ_MODEL.type:
+            return { action: actions.READ, completed: this.CHANGE_MODEL };
+        case this.UPDATE_MODEL.type:
+            return { action: actions.UPDATE };
+        case this.DELETE_MODEL.type:
+            return { action: actions.DELETE };
+        case this.LIST_MODELS.type:
+            return { action: actions.READ, completed: this.POPULATE_MODELS };
+        case this.POPULATE_MODELS.type:
+            return { action: actions.NONE };
+        default:
+            return { action: actions.NONE };
+        }
     }
 
     static get CREATE_MODEL() {
@@ -44,75 +98,43 @@ export class Model {
         return actions.create(`POPULATE_${this.name}s`);
     }
 
-    /** strategy defines the state transitions for each action in the Model.
-     *  As these are async actions there is a next action and then
-     *  a subsequent action to be called on completion of the action.
-     *
-     *  This method is soley to isolate this logic into a single place :-)
-    **/
-    static strategy(action) {
-        switch (action.type) {
-        case this.CREATE_MODEL.type:
-            return { action: actions.NONE };
-        case this.READ_MODEL.type:
-            return { action: actions.READ, completed: this.CHANGE_MODEL };
-        case this.UPDATE_MODEL.type:
-            return { action: actions.UPDATE };
-        case this.DELETE_MODEL.type:
-            return { action: actions.DELETE };
-        case this.LIST_MODELS.type:
-            return { action: actions.READ, completed: this.POPULATE_MODELS };
-        case this.POPULATE_MODELS.type:
-            return { action: actions.NONE };
-        default:
-            return { action: actions.NONE };
-        }
-    }
-
-    /** INITIAL_STATE defines the inital values for all fields in the model.
-     *  This method must be overridden in subclasses.
-    **/
-    static get INITIAL_STATE() {
-        return {};
-    }
-
     static reduce(state = this.INITIAL_STATE, action) {
         switch (action.type) {
         case this.CHANGE_MODEL.type:
-            return new this({
+            return this.revive({
                 ...state,
                 ...this.spread(action),
             });
         case this.CHANGE_FIELD.type:
-            return new this({
+            return this.revive({
                 ...state,
                 [action.id]: action.value,
             });
         case this.CREATE_MODEL.type:
-            return new this({
+            return this.revive({
                 ...state,
                 ...this.INITIAL_STATE,
                 ...this.strategy(this.CREATE_MODEL),
             });
         case this.READ_MODEL.type:
-            return new this({
+            return this.revive({
                 ...state,
                 ...this.INITIAL_STATE,
                 id: action.value,
                 ...this.strategy(this.READ_MODEL),
             });
         case this.UPDATE_MODEL.type:
-            return new this({
+            return this.revive({
                 ...state,
                 ...this.strategy(this.UPDATE_MODEL),
             });
         case this.DELETE_MODEL.type:
-            return new this({
+            return this.revive({
                 ...state,
                 ...this.strategy(this.DELETE_MODEL),
             });
         default:
-            return new this(state);
+            return this.revive(state);
         }
     }
 
@@ -137,10 +159,6 @@ export class Model {
             models: [],
             action: actions.NONE,
         };
-    }
-
-    static reviveList(models) {
-        return models.map(model => new this(model));
     }
 
     static reduceList(state = this.INITIAL_LIST_STATE, action) {

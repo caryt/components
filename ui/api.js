@@ -26,7 +26,7 @@ export class API {
         </ui.Button>;
     }
 
-    static Label( {model, id }) {
-        return <span>{id}</span>; // FIXME - model.LABELS[id];
+    static Label({ model, id }) {
+        return <span>{model.LABELS[id]}</span>;
     }
 }
