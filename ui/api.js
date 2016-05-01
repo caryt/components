@@ -6,23 +6,30 @@ import { i, dispatch, event } from 'reframed/index';
 
 export class API {
     static Input({ model, id }) {
-        return <ui.Input
-          id={id}
-          label={model.constructor.LABELS[id]}
-          value={model[id]}
-          onChange={dispatch(model.constructor.CHANGE_FIELD, event)}
-        />;
+        const action = dispatch(model.constructor.CHANGE_FIELD, event);
+        const lbl = model.constructor.LABELS[id];
+        const val = model[id];
+        return <ui.Input id={id} label={lbl} value={val} onChange={action} />;
     }
 
     static Add({ model }) {
-        return <ui.Button onClick={dispatch(model.CREATE_MODEL)}>
+        const action = dispatch(model.CREATE_MODEL);
+        return <ui.Button className="btn-primary" onClick={action}>
             {i`Add`}
         </ui.Button>;
     }
 
     static Save({ model }) {
-        return <ui.Button onClick={dispatch(model.constructor.UPDATE_MODEL)}>
+        const action = dispatch(model.constructor.UPDATE_MODEL);
+        return <ui.Button className="btn-primary" onClick={action}>
             {i`Save`}
+        </ui.Button>;
+    }
+
+    static Delete({ model }) {
+        const action = dispatch(model.constructor.DELETE_MODEL);
+        return <ui.Button className="btn-danger" onClick={action}>
+            {i`Delete`}
         </ui.Button>;
     }
 

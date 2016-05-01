@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from './table';
 
-export const List = ({ model, header, children }) =>
+export const List = ({ list, header, children }) =>
     <Table header={header}>
-        {model.map(children)}
+        {list.map(children)}
     </Table>;

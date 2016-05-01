@@ -1,9 +1,7 @@
 import React from 'react';
 import 'bootstrap-datepicker';
-import { Icon } from './icon';
-import { config } from 'reframed/index';
 
-export const Button = ({ children, ...props }) =>
-    <button className="btn" {...props}>
+export const Button = ({ children, className = '', ...props }) =>
+    <button className={`btn ${className}`} {...props}>
         {children}
     </button>;
