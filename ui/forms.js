@@ -31,8 +31,8 @@ export class Datepicker extends React.Component {
     }
 
     render() {
-        const { 
-            label, children, id = '', placeholder = null, ...props 
+        const {
+            label, children, id = '', placeholder = null, ...props
         } = this.props;
         const { dateFormat } = config.locale;
         return <FormGroup label={label} id={id}>

@@ -1,6 +1,6 @@
 /** Routines to create and manage a Redux store.
  *  The store contains a collection of reducer functions. It responds to
- *  events and uses the reducers to compute a new state base don the action.
+ *  events and uses the reducers to compute a new state based on the action.
  *
  *  Several dispatcher functions are provided to cater for different classes of actions.
  **/
@@ -34,7 +34,7 @@ export function createStore({ reducers, listener }) {
 **/
 export const doDispatch = (action, args) => {
     log.debug(`dispatch ${action.type}`, args);
-    store.dispatch({...args, ...action});
+    store.dispatch({ ...args, ...action });
     log.trace('new state', store.state);
 };
 
@@ -42,11 +42,11 @@ export const doDispatch = (action, args) => {
     Defaults to dispatching a standard action if no additional details provided
 **/
 export const dispatch = (_action, fn = action) => {
-    const {dispatcher, ...args} = fn;
+    const { dispatcher, ...args } = fn;
     return (dispatcher === undefined)
         ? doDispatch(_action, args)
         : dispatcher.bind(null, null, _action, ...args);
-}
+};
 
 /** The default dispatcher that simply passes args as the new state.
 **/
@@ -60,7 +60,7 @@ export const action = {
 **/
 export const event = {
     dispatcher: (component, action, event) =>
-        doDispatch(action, { value: event.target.value }),
+        doDispatch(action, { id: event.target.id, value: event.target.value }),
 };
 
 /** A dispatcher that receives a HTTP response in args and passes on the
@@ -69,7 +69,7 @@ export const event = {
 **/
 export const resource = {
     dispatcher: (component, action, error, response) =>
-        doDispatch(action, {...response.body, error, response}),
+        doDispatch(action, { ...response.body, error, response }),
 };
 
 export const recharts = {

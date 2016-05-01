@@ -2,6 +2,7 @@ import React from 'react';
 
 export default React;
 
+export * from './api';
 export * from './button';
 export * from './donut';
 export * from './error';

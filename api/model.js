@@ -32,6 +32,10 @@ export class Model {
         return actions.create(`CHANGE_${this.name}`);
     }
 
+    static get CHANGE_FIELD() {
+        return actions.create(`CHANGE_${this.name}_FIELD`);
+    }
+
     static get LIST_MODELS() {
         return actions.create(`LIST_${this.name}s`);
     }
@@ -40,11 +44,29 @@ export class Model {
         return actions.create(`POPULATE_${this.name}s`);
     }
 
-    /** FIELDS are the data (i.e. non-key) fields returned from an API call.
-     *  This method must be overridden in subclasses.
+    /** strategy defines the state transitions for each action in the Model.
+     *  As these are async actions there is a next action and then
+     *  a subsequent action to be called on completion of the action.
+     *
+     *  This method is soley to isolate this logic into a single place :-)
     **/
-    static get FIELDS() {
-        return [];
+    static strategy(action) {
+        switch (action.type) {
+        case this.CREATE_MODEL.type:
+            return { action: actions.NONE };
+        case this.READ_MODEL.type:
+            return { action: actions.READ, completed: this.CHANGE_MODEL };
+        case this.UPDATE_MODEL.type:
+            return { action: actions.UPDATE };
+        case this.DELETE_MODEL.type:
+            return { action: actions.DELETE };
+        case this.LIST_MODELS.type:
+            return { action: actions.READ, completed: this.POPULATE_MODELS };
+        case this.POPULATE_MODELS.type:
+            return { action: actions.NONE };
+        default:
+            return { action: actions.NONE };
+        }
     }
 
     /** INITIAL_STATE defines the inital values for all fields in the model.
@@ -61,36 +83,36 @@ export class Model {
                 ...state,
                 ...this.spread(action),
             });
-        case this.READ_MODEL.type:
+        case this.CHANGE_FIELD.type:
             return new this({
                 ...state,
-                ...this.INITIAL_STATE,
-                id: action.value,
-                action: actions.READ,
-                completed: this.CHANGE_MODEL,
-            });
-        case this.UPDATE_MODEL.type:
-            return new this({
-                ...state,
-                ...this.INITIAL_STATE,
-                id: action.value,
-                action: actions.UPDATE,
-            });
-        case this.DELETE_MODEL.type:
-            return new this({
-                ...state,
-                ...this.INITIAL_STATE,
-                id: action.value,
-                action: actions.READ,
+                [action.id]: action.value,
             });
         case this.CREATE_MODEL.type:
             return new this({
                 ...state,
                 ...this.INITIAL_STATE,
-                action: actions.NONE,
+                ...this.strategy(this.CREATE_MODEL),
+            });
+        case this.READ_MODEL.type:
+            return new this({
+                ...state,
+                ...this.INITIAL_STATE,
+                id: action.value,
+                ...this.strategy(this.READ_MODEL),
+            });
+        case this.UPDATE_MODEL.type:
+            return new this({
+                ...state,
+                ...this.strategy(this.UPDATE_MODEL),
+            });
+        case this.DELETE_MODEL.type:
+            return new this({
+                ...state,
+                ...this.strategy(this.DELETE_MODEL),
             });
         default:
-            return state;
+            return new this(state);
         }
     }
 
@@ -101,10 +123,10 @@ export class Model {
      * and any error is propogated to the result.
     **/
     static spread(action) {
+        const source = (action.error) ? this.INITIAL_STATE : action;
+        const keys = Object.keys(this.INITIAL_STATE);
         return {
-            ...filter((action.error) ? this.INITIAL_STATE : action, field =>
-                this.FIELDS.indexOf(field) > -1
-            ),
+            ...filter(source, field => keys.indexOf(field) > -1),
             action: actions.NONE,
             error: action.error,
         };
@@ -126,14 +148,13 @@ export class Model {
         case this.LIST_MODELS.type:
             return {
                 ...state,
-                action: actions.READ,
-                completed: this.POPULATE_MODELS,
+                ...this.strategy(this.LIST_MODELS),
             };
         case this.POPULATE_MODELS.type:
             return {
                 ...state,
                 models: this.reviveList(action.response.body),
-                action: actions.NONE,
+                ...this.strategy(this.POPULATE_MODELS),
                 error: action.error,
             };
         default:
@@ -141,3 +162,4 @@ export class Model {
         }
     }
 }
+
