@@ -3,7 +3,7 @@ import 'bootstrap-datepicker';
 import { Icon } from './icon';
 import { config } from 'reframed/index';
 
-const FormGroup = ({ label, children, id }) =>
+export const FormGroup = ({ label, children, id = '' }) =>
     <div className="form-group">
         {label ? <label htmlFor={id}>{label}</label> : false}
         {children}
