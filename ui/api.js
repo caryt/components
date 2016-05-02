@@ -21,7 +21,9 @@ export class API {
 
     static Save({ model }) {
         const action = dispatch(model.constructor.UPDATE_MODEL);
-        return <ui.Button className="btn-primary" onClick={action}>
+        return <ui.Button
+          className="btn-primary" onClick={action} disabled={!model.isValid}
+        >
             {i`Save`}
         </ui.Button>;
     }

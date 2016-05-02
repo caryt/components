@@ -24,6 +24,27 @@ class BaseModel {
         return {};
     }
 
+    /** SCHEMA defines the validations applied to each field in the model.
+     *  This method must be overridden in subclasses.
+    **/
+    static get SCHEMA() {
+        return {};
+    }
+
+    validate() {
+        return {};
+    }
+
+    get isValid() {
+        const validate = this.validate();
+        for (const item in validate) {
+            if (!validate[item].valid) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     static revive(state) {
         return new this(state);
     }
