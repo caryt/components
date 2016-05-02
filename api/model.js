@@ -1,6 +1,5 @@
 import * as actions from 'reframed/actions';
-import { filter, forEach } from 'reframed/functional';
-
+import { dispatch, navigateTo, filter, forEach } from 'reframed/index';
 /* A BaseModel encapsulates Business Logic.
  * Subclass and add getter functions to calculate derived fields.
 **/
@@ -11,10 +10,13 @@ class BaseModel {
     }
 
     /** INITIAL_STATE defines the inital values for all fields in the model.
-     *  This method must be overridden in subclasses.
+     *  This method must be extended in subclasses.
     **/
     static get INITIAL_STATE() {
-        return {};
+        return {
+            id: '',
+            action: actions.NONE,
+        };
     }
 
     /** LABELS defines the display labels for all fields in the model.
@@ -29,6 +31,13 @@ class BaseModel {
     **/
     static get SCHEMA() {
         return {};
+    }
+
+    /** Returns `true` if this is a new model, i.e. one that is being created
+     *  and hasn't yet been saved to the server.
+    **/
+    get isNew() {
+        return (this.id === '');
     }
 
     validate() {
@@ -66,12 +75,12 @@ export class Model extends BaseModel {
      *  As these are async actions there is a next action and then
      *  a subsequent action to be called on completion of the action.
      *
-     *  This method is soley to isolate this logic into a single place :-)
+     *  This method is solely to isolate this logic into a single place :-)
     **/
     static strategy(action) {
         switch (action.type) {
         case this.CREATE_MODEL.type:
-            return { action: actions.NONE };
+            return { action: actions.CREATE };
         case this.READ_MODEL.type:
             return { action: actions.READ, completed: this.CHANGE_MODEL };
         case this.UPDATE_MODEL.type:

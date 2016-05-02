@@ -6,7 +6,7 @@
  **/
 import React from 'react';
 import * as Redux from 'redux';
-import { logger } from 'reframed/index';
+import { router, logger } from 'reframed/index';
 const log = logger('store');
 
 const EXTENSION = createStore => (
@@ -64,7 +64,7 @@ export const event = {
 };
 
 /** A dispatcher that receives a HTTP response in args and passes on the
- *  response. For convience the response values are spead.
+ *  response. For convenience the response values are spread.
  *  Designed to use with HHTP request library, i.e. superagent.
 **/
 export const resource = {
@@ -75,4 +75,12 @@ export const resource = {
 export const recharts = {
     dispatcher: (component, action, entry, index, event) =>
         doDispatch(action, entry),
+};
+
+/** A dispatcher that navigates to a new page (`path`),
+ *  rather than dispatching an action.
+**/
+export const navigateTo = {
+    dispatcher: (component, path) =>
+        router.navigateTo(path),
 };

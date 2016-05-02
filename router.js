@@ -24,6 +24,12 @@ export class Router extends React.Component {
         }
     }
 
+    /** Programatically navigate to a new `path`.
+    **/
+    navigateTo(path) {
+        browserHistory.push(path);
+    }
+
     render() {
         const { routes } = this.props;
         return <ReactRouter
