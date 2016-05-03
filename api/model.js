@@ -80,15 +80,15 @@ export class Model extends BaseModel {
     static strategy(action) {
         switch (action.type) {
         case this.CREATE_MODEL.type:
-            return { action: actions.CREATE, completed: this.DISPLAY_LIST };
+            return { action: this.POST, completed: this.DISPLAY_LIST };
         case this.READ_MODEL.type:
-            return { action: actions.READ, completed: this.CHANGE_MODEL };
+            return { action: this.GET, completed: this.CHANGE_MODEL };
         case this.UPDATE_MODEL.type:
-            return { action: actions.UPDATE, completed: this.DISPLAY_LIST };
+            return { action: this.PUT, completed: this.DISPLAY_LIST };
         case this.DELETE_MODEL.type:
-            return { action: actions.DELETE, completed: this.DISPLAY_LIST };
+            return { action: this.DELETE, completed: this.DISPLAY_LIST };
         case this.LIST_MODELS.type:
-            return { action: actions.READ, completed: this.POPULATE_MODELS };
+            return { action: this.GET, completed: this.POPULATE_MODELS };
         case this.POPULATE_MODELS.type:
             return { action: actions.NONE };
         default:
@@ -96,36 +96,52 @@ export class Model extends BaseModel {
         }
     }
 
+    static get GET() {
+        return { type: 'GET', model: this.name };
+    }
+
+    static get PUT() {
+        return { type: 'PUT', model: this.name };
+    }
+
+    static get POST() {
+        return { type: 'POST', model: this.name };
+    }
+
+    static get DELETE() {
+        return { type: 'DELETE', model: this.name };
+    }
+
     static get CREATE_MODEL() {
-        return actions.create(`CREATE_${this.name}`);
+        return actions.create('CREATE', this);
     }
 
     static get READ_MODEL() {
-        return actions.create(`READ_${this.name}`);
+        return actions.create('READ', this);
     }
 
     static get UPDATE_MODEL() {
-        return actions.create(`UPDATE_${this.name}`);
+        return actions.create('UPDATE', this);
     }
 
     static get DELETE_MODEL() {
-        return actions.create(`DELETE_${this.name}`);
+        return actions.create('DEL', this);
     }
 
     static get CHANGE_MODEL() {
-        return actions.create(`CHANGE_${this.name}`);
+        return actions.create('CHANGE', this);
     }
 
     static get CHANGE_FIELD() {
-        return actions.create(`CHANGE_${this.name}_FIELD`);
+        return actions.create('CHANGE_FIELD', this);
     }
 
     static get LIST_MODELS() {
-        return actions.create(`LIST_${this.name}s`);
+        return actions.create('LIST', this);
     }
 
     static get POPULATE_MODELS() {
-        return actions.create(`POPULATE_${this.name}s`);
+        return actions.create('POPULATE', this);
     }
 
     static reduce(state = this.INITIAL_STATE, action) {

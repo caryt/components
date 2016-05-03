@@ -1,15 +1,13 @@
-/* Definitions for the general-purpose CRUD (Create, Read, Update, Delete)
+/* Definitions for the general-purpose RESTful calls (POST, GET, PUT, DELETE)
     actions that can be ampped to many Database calls and RESTful methods.
 */
-export const CREATE = { type: 'CREATE' };
-export const READ = { type: 'READ' };
-export const UPDATE = { type: 'UPDATE' };
+export const POST = { type: 'POST' };
+export const GET = { type: 'GET' };
+export const PUT = { type: 'PUT' };
 export const DELETE = { type: 'DELETE' };
 
-export const CRUD = ['CREATE', 'READ', 'UPDATE', 'DELETE'];
-
-/** Create and return a new action called `name` **/
-export const create = name => (
-    { type: name }
+/** Create and return a new action for a model **/
+export const create = (type, model) => (
+    { type: `${type}_${model.name}`, model: model.name }
 );
 

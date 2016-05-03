@@ -1,4 +1,4 @@
-import { CREATE, READ, UPDATE, DELETE } from './actions';
+import { POST, GET, PUT, DELETE } from './actions';
 
 function get(url, keys, completed, options = {}) {
     const result = url.get(keys)
@@ -32,14 +32,14 @@ function del(url, keys, completed, options = {}) {
 
 export function rest(state, action) {
     const { url, completed, ...keys } = state;
-    switch (action) {
-    case CREATE:
+    switch (action.type) {
+    case POST.type:
         return post(url, keys, completed);
-    case READ:
+    case GET.type:
         return get(url, keys, completed);
-    case UPDATE:
+    case PUT.type:
         return put(url, keys, completed);
-    case DELETE:
+    case DELETE.type:
         return del(url, keys, completed);
     default:
         throw 'Unknown action';
