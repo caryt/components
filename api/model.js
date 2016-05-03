@@ -80,13 +80,13 @@ export class Model extends BaseModel {
     static strategy(action) {
         switch (action.type) {
         case this.CREATE_MODEL.type:
-            return { action: actions.CREATE };
+            return { action: actions.CREATE, completed: this.DISPLAY_LIST };
         case this.READ_MODEL.type:
             return { action: actions.READ, completed: this.CHANGE_MODEL };
         case this.UPDATE_MODEL.type:
-            return { action: actions.UPDATE };
+            return { action: actions.UPDATE, completed: this.DISPLAY_LIST };
         case this.DELETE_MODEL.type:
-            return { action: actions.DELETE };
+            return { action: actions.DELETE, completed: this.DISPLAY_LIST };
         case this.LIST_MODELS.type:
             return { action: actions.READ, completed: this.POPULATE_MODELS };
         case this.POPULATE_MODELS.type:

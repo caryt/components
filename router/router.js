@@ -40,3 +40,10 @@ export class Router extends React.Component {
 }
 
 export const router = new Router();
+
+export const NAVIGATE = { type: 'NAVIGATE' };
+
+/** Create and return a new action that navigates to `path` **/
+export const createNavigation = path => (
+    { ...NAVIGATE, path }
+);

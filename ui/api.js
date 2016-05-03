@@ -2,7 +2,8 @@
 **/
 import React from 'react';
 import * as ui from './index';
-import { i, dispatch, event, navigateTo } from 'reframed/index';
+import { i, dispatch, event } from 'reframed/index';
+import * as actions from 'reframed/actions';
 
 export class API {
     static Input({ model, id }) {
@@ -15,7 +16,7 @@ export class API {
     /** Navigate from List to new Item page.
     **/
     static Add({ model }) {
-        const action = dispatch('/users/new', navigateTo);
+        const action = dispatch(actions.createNavigation('/users/new'));
         return <ui.Button className="btn-primary" onClick={action}>
             {i`Add`}
         </ui.Button>;

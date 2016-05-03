@@ -6,6 +6,8 @@ export const READ = { type: 'READ' };
 export const UPDATE = { type: 'UPDATE' };
 export const DELETE = { type: 'DELETE' };
 
+export const CRUD = ['CREATE', 'READ', 'UPDATE', 'DELETE'];
+
 /** Create and return a new action called `name` **/
 export const create = name => (
     { type: name }

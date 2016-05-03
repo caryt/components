@@ -2,11 +2,12 @@
  *  The store contains a collection of reducer functions. It responds to
  *  events and uses the reducers to compute a new state based on the action.
  *
- *  Several dispatcher functions are provided to cater for different classes of actions.
+ *  Dispatcher functions are provided to cater for many different actions.
  **/
 import React from 'react';
 import * as Redux from 'redux';
 import { router, logger } from 'reframed/index';
+import { NAVIGATE } from './actions';
 const log = logger('store');
 
 const EXTENSION = createStore => (
@@ -33,8 +34,15 @@ export function createStore({ reducers, listener }) {
 /** Immediately dispatch an action.
 **/
 export const doDispatch = (action, args) => {
-    log.debug(`dispatch ${action.type}`, args);
-    store.dispatch({ ...args, ...action });
+    if (action.type === NAVIGATE.type) {
+        log.debug(`dispatch ${action.type} ${action.path}`, '');
+        router.navigateTo(action.path);
+        store.state.user.action = { type: null, comment: 'Null action' }; // FIXME
+        store.state.user.completed = { type: null, comment: 'Null action' }; // FIXME
+    } else {
+        log.debug(`dispatch ${action.type}`, args);
+        store.dispatch({ ...args, ...action });
+    }
     log.trace('new state', store.state);
 };
 
@@ -75,12 +83,4 @@ export const resource = {
 export const recharts = {
     dispatcher: (component, action, entry, index, event) =>
         doDispatch(action, entry),
-};
-
-/** A dispatcher that navigates to a new page (`path`),
- *  rather than dispatching an action.
-**/
-export const navigateTo = {
-    dispatcher: (component, path) =>
-        router.navigateTo(path),
 };
