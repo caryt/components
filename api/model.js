@@ -1,20 +1,24 @@
+import React from 'react';
 import * as actions from 'reframed/actions';
-import { dispatch, navigateTo, filter, forEach } from 'reframed/index';
+import { forEach, filter, store, doDispatch, action } from 'reframed/index';
+
 /* A BaseModel encapsulates Business Logic.
  * Subclass and add getter functions to calculate derived fields.
 **/
 
 class BaseModel {
-    constructor(props) {
+    constructor(options) {
+        const props = options || this.INITIAL_STATE;
         forEach(props, (key, value) => { this[key] = value; });
     }
 
     /** INITIAL_STATE defines the inital values for all fields in the model.
      *  This method must be extended in subclasses.
     **/
-    static get INITIAL_STATE() {
+    get INITIAL_STATE() {
         return {
             id: '',
+            models: [],
             action: actions.NONE,
         };
     }
@@ -22,14 +26,14 @@ class BaseModel {
     /** LABELS defines the display labels for all fields in the model.
      *  This method must be overridden in subclasses.
     **/
-    static get LABELS() {
+    get LABELS() {
         return {};
     }
 
     /** SCHEMA defines the validations applied to each field in the model.
      *  This method must be overridden in subclasses.
     **/
-    static get SCHEMA() {
+    get SCHEMA() {
         return {};
     }
 
@@ -54,12 +58,22 @@ class BaseModel {
         return true;
     }
 
-    static revive(state) {
-        return new this(state);
+    revive(state) {
+        return {
+            [this.constructor.name]: new this.constructor(state),
+        };
     }
 
-    static reviveList(models) {
-        return models.map(model => this.revive(model));
+    reviveList(models) {
+        return models.map(model => new this.constructor(model));
+    }
+
+    get FIELDS() {
+        const fields = Object.keys(this.INITIAL_STATE);
+        const ignore = ['models', 'action'];
+        return filter(this, key =>
+            fields.indexOf(key) > -1 && ignore.indexOf(key) === -1
+        );
     }
 }
 
@@ -70,160 +84,45 @@ class BaseModel {
  * Reducers will return Model instances rather than simple mappings.
 **/
 export class Model extends BaseModel {
-
-    /** strategy defines the state transitions for each action in the Model.
-     *  As these are async actions there is a next action and then
-     *  a subsequent action to be called on completion of the action.
-     *
-     *  This method is solely to isolate this logic into a single place :-)
-    **/
-    static strategy(action) {
-        switch (action.type) {
-        case this.CREATE_MODEL.type:
-            return { action: this.POST, completed: this.DISPLAY_LIST };
-        case this.READ_MODEL.type:
-            return { action: this.GET, completed: this.CHANGE_MODEL };
-        case this.UPDATE_MODEL.type:
-            return { action: this.PUT, completed: this.DISPLAY_LIST };
-        case this.DELETE_MODEL.type:
-            return { action: this.DELETE, completed: this.DISPLAY_LIST };
-        case this.LIST_MODELS.type:
-            return { action: this.GET, completed: this.POPULATE_MODELS };
-        case this.POPULATE_MODELS.type:
-            return { action: actions.NONE };
-        default:
-            return { action: actions.NONE };
-        }
-    }
-
-    static get GET() {
-        return { type: 'GET', model: this.name };
-    }
-
-    static get PUT() {
-        return { type: 'PUT', model: this.name };
-    }
-
-    static get POST() {
-        return { type: 'POST', model: this.name };
-    }
-
-    static get DELETE() {
-        return { type: 'DELETE', model: this.name };
-    }
-
-    static get CREATE_MODEL() {
-        return actions.create('CREATE', this);
-    }
-
-    static get READ_MODEL() {
-        return actions.create('READ', this);
-    }
-
-    static get UPDATE_MODEL() {
-        return actions.create('UPDATE', this);
-    }
-
-    static get DELETE_MODEL() {
-        return actions.create('DEL', this);
-    }
-
-    static get CHANGE_MODEL() {
-        return actions.create('CHANGE', this);
-    }
-
-    static get CHANGE_FIELD() {
-        return actions.create('CHANGE_FIELD', this);
-    }
-
-    static get LIST_MODELS() {
-        return actions.create('LIST', this);
-    }
-
-    static get POPULATE_MODELS() {
-        return actions.create('POPULATE', this);
-    }
-
-    static reduce(state = this.INITIAL_STATE, action) {
-        switch (action.type) {
-        case this.CHANGE_MODEL.type:
-            return this.revive({
-                ...state,
-                ...this.spread(action),
-            });
-        case this.CHANGE_FIELD.type:
-            return this.revive({
-                ...state,
-                [action.id]: action.value,
-            });
-        case this.CREATE_MODEL.type:
-            return this.revive({
-                ...state,
-                ...this.INITIAL_STATE,
-                ...this.strategy(this.CREATE_MODEL),
-            });
-        case this.READ_MODEL.type:
-            return this.revive({
-                ...state,
-                ...this.INITIAL_STATE,
-                id: action.value,
-                ...this.strategy(this.READ_MODEL),
-            });
-        case this.UPDATE_MODEL.type:
-            return this.revive({
-                ...state,
-                ...this.strategy(this.UPDATE_MODEL),
-            });
-        case this.DELETE_MODEL.type:
-            return this.revive({
-                ...state,
-                ...this.strategy(this.DELETE_MODEL),
-            });
-        default:
-            return this.revive(state);
-        }
-    }
-
-    /** Helper function to spread response fields in custom CHANGE_xxx reducers.
-     *  If the CHANGE action has an error, it returns initial values
-     * otherwise it returns values from the response -- both filtered by FIELDS
-     * the next action is set to a null action (to prevent an infinite loop)
-     * and any error is propogated to the result.
-    **/
-    static spread(action) {
-        const source = (action.error) ? this.INITIAL_STATE : action;
-        const keys = Object.keys(this.INITIAL_STATE);
-        return {
-            ...filter(source, field => keys.indexOf(field) > -1),
-            action: actions.NONE,
-            error: action.error,
-        };
-    }
-
-    static get INITIAL_LIST_STATE() {
-        return {
-            models: [],
-            action: actions.NONE,
-        };
-    }
-
-    static reduceList(state = this.INITIAL_LIST_STATE, action) {
-        switch (action.type) {
-        case this.LIST_MODELS.type:
-            return {
-                ...state,
-                ...this.strategy(this.LIST_MODELS),
-            };
-        case this.POPULATE_MODELS.type:
-            return {
-                ...state,
-                models: this.reviveList(action.response.body),
-                ...this.strategy(this.POPULATE_MODELS),
-                error: action.error,
-            };
-        default:
-            return state;
-        }
+    constructor(...args) {
+        super(...args);
+        this.HTTP_GET = actions.create('HTTP_GET', this);
+        this.HTTP_PUT = actions.create('HTTP_PUT', this);
+        this.HTTP_POST = actions.create('HTTP_POST', this);
+        this.HTTP_DELETE = actions.create('HTTP_DELETE', this);
+        this.CREATE = actions.create('CREATE', this);
+        this.READ = actions.create('READ', this);
+        this.UPDATE = actions.create('UPDATE', this);
+        this.DELETE = actions.create('DELETE', this);
+        this.CHANGE_MODEL = actions.create('CHANGE_MODEL', this);
+        this.CHANGE_FIELD = actions.create('CHANGE_FIELD', this);
+        this.LIST = actions.create('LIST', this);
+        this.POPULATE = actions.create('POPULATE', this);
     }
 }
 
+/** A Page proivides some helper methods to contrcut pages that display Models
+**/
+export class Page extends React.Component {
+    componentWillMount() {
+        const Model = this.constructor.MODEL;
+        store.state.models = { [Model.name]: new Model() };
+    }
+
+    get model() {
+        const Model = this.constructor.MODEL;
+        return store.state.models[Model.name];
+    }
+
+    list() {
+        doDispatch(this.model.LIST, action);
+    }
+
+    read() {
+        doDispatch(this.model.READ, { action, value: this.props.params.id });
+    }
+
+    render() {
+        return null;
+    }
+}

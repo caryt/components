@@ -7,8 +7,8 @@ import * as actions from 'reframed/actions';
 
 export class API {
     static Input({ model, id }) {
-        const action = dispatch(model.constructor.CHANGE_FIELD, event);
-        const lbl = model.constructor.LABELS[id];
+        const action = dispatch(model.CHANGE_FIELD, event);
+        const lbl = model.LABELS[id];
         const val = model[id];
         return <ui.Input id={id} label={lbl} value={val} onChange={action} />;
     }
@@ -28,8 +28,8 @@ export class API {
     **/
     static Save({ model }) {
         const action = (model.isNew)
-            ? dispatch(model.constructor.CREATE_MODEL)
-            : dispatch(model.constructor.UPDATE_MODEL);
+            ? dispatch(model.CREATE)
+            : dispatch(model.UPDATE);
         return <ui.Button
           className="btn-primary" onClick={action} disabled={!model.isValid}
         >
@@ -40,7 +40,7 @@ export class API {
     /** Delete a Model
     **/
     static Delete({ model }) {
-        const action = dispatch(model.constructor.DELETE_MODEL);
+        const action = dispatch(model.DELETE);
         return (model.isNew)
             ? null
             : <ui.Button className="btn-danger" onClick={action}>

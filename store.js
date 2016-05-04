@@ -37,8 +37,6 @@ export const doDispatch = (action, args) => {
     if (action.type === NAVIGATE.type) {
         log.debug(`dispatch ${action.type} ${action.path}`, '');
         router.navigateTo(action.path);
-        store.state.user.action = { type: null, comment: 'Null action' }; // FIXME
-        store.state.user.completed = { type: null, comment: 'Null action' }; // FIXME
     } else {
         log.debug(`dispatch ${action.type}`, args);
         store.dispatch({ ...args, ...action });

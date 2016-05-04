@@ -11,8 +11,8 @@ export class Component extends React.Component {
 
     render() {
         const { id, reducer, duration, state, dispatcher } = this.props;
-        const { action, completed } = state;
-        if (action.type) {
+        const { action, completed, resource } = state;
+        if (action && action.type && id === resource.constructor.name) {
             const onCompleted = (completed && completed.type === 'NAVIGATE')
                 ? dispatch(completed)
                 : dispatch(completed, dispatcher);

@@ -33,7 +33,7 @@ describe('Resource is a RESTful interface to a back-end system.', () => {
         beforeEach(done => {
             const url = new URL(({ id }) =>
                 `${CONFIG.DATABASE}/id/${id}`);
-            representation = rest({ url, id: '987' }, actions.GET)
+            representation = rest({ url, id: '987' }, actions.HTTP_GET)
                 .end((error, result) => {
                     representation = { error, result };
                     done();
