@@ -20,6 +20,7 @@ class BaseModel {
             id: '',
             models: [],
             action: actions.NONE,
+            validations: [],
         };
     }
 
@@ -44,14 +45,13 @@ class BaseModel {
         return (this.id === '');
     }
 
-    validate() {
-        return {};
+    revalidate() {
     }
 
     get isValid() {
-        const validate = this.validate();
-        for (const item in validate) {
-            if (!validate[item].valid) {
+        const validations = this.validate();
+        for (const item in validations) {
+            if (!validations[item].valid) {
                 return false;
             }
         }
@@ -101,17 +101,17 @@ export class Model extends BaseModel {
     }
 }
 
-/** A Page proivides some helper methods to contrcut pages that display Models
+/** A Page provides some helper methods to contrcut pages that display Models
 **/
 export class Page extends React.Component {
     componentWillMount() {
-        const Model = this.constructor.MODEL;
-        store.state.models = { [Model.name]: new Model() };
+        const ModelClass = this.constructor.MODEL;
+        store.state.models = { [ModelClass.name]: new ModelClass() };
     }
 
     get model() {
-        const Model = this.constructor.MODEL;
-        return store.state.models[Model.name];
+        const ModelClass = this.constructor.MODEL;
+        return store.state.models[ModelClass.name];
     }
 
     list() {
