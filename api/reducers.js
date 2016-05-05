@@ -38,16 +38,16 @@ function del(url, keys, completed) {
 }
 
 export function rest(state = {}, action) {
-    const { url, completed, resource, ...keys } = state;
+    const { url, completed, resource } = state;
     switch (action.type) {
     case HTTP_POST.type:
         return post(url, resource.FIELDS, completed);
     case HTTP_GET.type:
-        return get(url, keys, completed);
+        return get(url, resource, completed);
     case HTTP_PUT.type:
         return put(url, resource.FIELDS, completed);
     case HTTP_DELETE.type:
-        return del(url, keys, completed);
+        return del(url, resource, completed);
     default:
         return state;
     }

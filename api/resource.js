@@ -16,7 +16,7 @@ export const Resource = ({ id, base, endpoint, resource }) =>
     <Async.Component
       id={id}
       reducer={rest}
-      state={{ url: base.addPath(endpoint), ...resource, resource }}
+      state={{ url: base.addPath(endpoint), resource }}
       dispatcher={resourceDispatcher}
       duration={config.MOCK_NETWORK_DELAY}
     />;
