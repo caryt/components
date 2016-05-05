@@ -1,6 +1,10 @@
 import React from 'react';
 import * as actions from 'reframed/actions';
-import { forEach, filter, store, doDispatch, action } from 'reframed/index';
+import {
+  forEach, filter,
+  store, doDispatch, action,
+  validationMessages, isValid,
+} from 'reframed/index';
 
 /* A BaseModel encapsulates Business Logic.
  * Subclass and add getter functions to calculate derived fields.
@@ -45,17 +49,12 @@ class BaseModel {
         return (this.id === '');
     }
 
-    revalidate() {
+    get isValid() {
+        return isValid(this);
     }
 
-    get isValid() {
-        const validations = this.validate();
-        for (const item in validations) {
-            if (!validations[item].valid) {
-                return false;
-            }
-        }
-        return true;
+    get validationMessages() {
+        return validationMessages(this);
     }
 
     revive(state) {
@@ -101,7 +100,7 @@ export class Model extends BaseModel {
     }
 }
 
-/** A Page provides some helper methods to contrcut pages that display Models
+/** A Page provides some helper methods to construct pages that display Models
 **/
 export class Page extends React.Component {
     componentWillMount() {
