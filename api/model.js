@@ -98,6 +98,10 @@ export class Model extends BaseModel {
         this.LIST = actions.create('LIST', this);
         this.POPULATE = actions.create('POPULATE', this);
     }
+
+    createNavigation(path) {
+        return { ...actions.NAVIGATE_MODEL, path };
+    }
 }
 
 /** A Page provides some helper methods to construct pages that display Models

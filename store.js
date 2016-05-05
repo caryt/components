@@ -7,7 +7,7 @@
 import React from 'react';
 import * as Redux from 'redux';
 import { router, logger } from 'reframed/index';
-import { NAVIGATE } from './actions';
+import { NAVIGATE, NAVIGATE_MODEL } from './actions';
 const log = logger('store');
 
 const EXTENSION = createStore => (
@@ -34,7 +34,7 @@ export function createStore({ reducers, listener }) {
 /** Immediately dispatch an action.
 **/
 export const doDispatch = (action, args) => {
-    if (action.type === NAVIGATE.type) {
+    if (action.type === NAVIGATE.type || action.type === NAVIGATE_MODEL.type) {
         log.debug(`dispatch ${action.type} ${action.path}`, '');
         router.navigateTo(action.path);
     } else {

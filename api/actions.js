@@ -13,6 +13,7 @@ export const DELETE = { type: 'DELETE' };
 
 export const CHANGE_MODEL = { type: 'CHANGE_MODEL' };
 export const CHANGE_FIELD = { type: 'CHANGE_FIELD' };
+export const NAVIGATE_MODEL = { type: 'NAVIGATE_MODEL' };
 
 export const LIST = { type: 'LIST' };
 export const POPULATE = { type: 'POPULATE' };
