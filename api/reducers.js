@@ -114,7 +114,6 @@ export function models(state = null, action) {
     case CREATE.type:
         newModel = {
             ...model,
-            ...model.INITIAL_STATE,
             ...strategy(model, CREATE),
         };
         break;
