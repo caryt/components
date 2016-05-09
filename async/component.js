@@ -1,5 +1,5 @@
 import React from 'react';
-import { dispatch, logger } from 'reframed/index';
+import { dispatch } from 'reframed/index';
 
 export class Component extends React.Component {
     delay(duration, fn, ...args) {

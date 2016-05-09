@@ -1,5 +1,3 @@
-import React from 'react';
-
 /** A script is an object that executes a series of actions
 **/
 export class Script {

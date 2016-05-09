@@ -8,9 +8,9 @@ const log = logger('i18n');
 
 /** i18n definition object
 **/
-export var i18n = new Jed({
+export const i18n = new Jed({
     domain: 'messages',
-    missing_key_callback: function (key) {
+    missing_key_callback: function translate(key) {
         const localeData = this.locale_data[this.domain];
         log.warn(`no translation for "${key}"`, {
             config: localeData[''],

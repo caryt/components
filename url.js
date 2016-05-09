@@ -8,13 +8,13 @@ const log = logger('url');
 **/
 export class URL {
     constructor(url) {
-        this._url = url;
+        this.aURL = url;
     }
 
-    url(keys = this, options = {}) {
-        return (typeof this._url === 'function')
-            ? this._url(keys)
-            : this._url;
+    url(keys = this) {
+        return (typeof this.aURL === 'function')
+            ? this.aURL(keys)
+            : this.aURL;
     }
 
     /** Constructs a new URL by appending the passed path to the base URL.

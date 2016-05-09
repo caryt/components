@@ -32,7 +32,7 @@ export class Datepicker extends React.Component {
 
     render() {
         const {
-            label, children, id = '', placeholder = null, ...props
+            label, children, id = '', placeholder = null, ...props,
         } = this.props;
         const { dateFormat } = config.locale;
         return <FormGroup label={label} id={id}>
@@ -44,7 +44,7 @@ export class Datepicker extends React.Component {
                   data-date-autoclose
                   data-date-today-highlight
                   data-date-show-on-focus={false}
-                  data-date-format={ dateFormat }
+                  data-date-format={dateFormat}
                   {...props}
                 />
                 <span className="input-group-addon">

@@ -30,11 +30,11 @@ export const forEach = (obj, fn) =>
 **/
 export const filter = (obj, fn) => {
     const result = {};
-    entries(obj).reduce((result, [key, value]) => {
+    entries(obj).reduce((res, [key, value]) => {
         if (fn(key, value)) {
-            result[key] = value;
+            res[key] = value; // eslint-disable-line no-param-reassign
         }
-        return result;
+        return res;
     }, result);
     return result;
 };

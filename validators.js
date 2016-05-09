@@ -46,7 +46,7 @@ export const validationMessages = model =>
 
 export const isValid = model => {
     const v = validations(model);
-    for (const item in v) {
+    for (const item in v) { // eslint-disable-line no-restricted-syntax
         if (!v[item].valid) {
             return false;
         }

@@ -1,6 +1,6 @@
 /** Logger module
 **/
-import * as Log4js from 'log4js';
+import * as Log4js from 'log4js'; // eslint-disable-line import/no-unresolved
 import { ConsoleAppender } from 'reframed/index';
 import { forEach } from './functional';
 
@@ -9,13 +9,13 @@ export const logger = Log4js.getLogger;
 const prop = (config, category, name) => (
     (category in config)
         ? config[category][name]
-        : config._default[name]
+        : config.default[name]
 );
 
 /** Configure a single logger
 **/
 const configureLogger = (category, config) => {
-    const log = new Log4js.getLogger(category);
+    const log = new Log4js.getLogger(category); // eslint-disable-line new-cap
     const get = prop.bind(undefined, config, category);
     log.setLevel(get('LOG_LEVEL'));
     log.addAppender(new ConsoleAppender(true));

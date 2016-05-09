@@ -65,4 +65,4 @@ class Config {
 
 /** Configuration object. Manages configuration settings for the application.
 **/
-export var config = new Config();
+export const config = new Config();

@@ -1,7 +1,7 @@
 import React from 'react';
 import * as Async from 'reframed/async/component';
 import { rest } from './reducers';
-import { resource as resourceDispatcher, config, map } from 'reframed/index';
+import { resource as resourceDispatcher, config } from 'reframed/index';
 import * as actions from './actions';
 
 class APIResource extends Async.Component {
