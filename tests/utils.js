@@ -1,9 +1,8 @@
-import React from 'react';
 import { deepFreeze } from './deepFreeze';
 import { config } from 'reframed/index';
 
 /** This is used to test reducers.
- *  It resurively freezes the before state so that
+ *  It recursively freezes the before state so that
  * any mutations will throw exceptions - as reducers should be pure functions.
 **/
 export function reduce(reducer, before, action) {

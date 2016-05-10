@@ -7,6 +7,7 @@ import { forEach } from './functional';
 const isLevel = (event, level) =>
     event.level.toString().search(level) !== -1;
 
+/* eslint-disable no-console */
 export class ConsoleAppender {
     initialize() {
     }
@@ -61,3 +62,5 @@ export class ConsoleAppender {
         console.clear();
     }
 }
+/* eslint-enable */
+

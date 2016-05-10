@@ -36,7 +36,7 @@ export class Application {
     }
 
     setInput(id, value) {
-        const input = $(`#${id}`);
+        const input = $(`#${id}`); // eslint-disable-line no-undef
         input.val(value);
         input[0].dispatchEvent(event);
     }

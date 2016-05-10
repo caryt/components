@@ -4,27 +4,28 @@
  *
  *  Dispatcher functions are provided to cater for many different actions.
  **/
-import React from 'react';
 import * as Redux from 'redux';
 import { router, logger } from 'reframed/index';
 import { NAVIGATE, NAVIGATE_MODEL } from './actions';
 const log = logger('store');
 
-const EXTENSION = createStore => (
+/* eslint-disable no-shadow */
+const extension = createStore => (
     window.devToolsExtension
         ? window.devToolsExtension()(createStore)
         : createStore
 );
+/* eslint-enable */
 
 /** Global (singleton) variable exposing the store.
  *  This enables easy access to the application state without passing it around.
 **/
-export var store = null;
+export let store = null;
 
 /** createStore ...
 **/
 export function createStore({ reducers, listener }) {
-    store = EXTENSION(Redux.createStore)(Redux.combineReducers(reducers));
+    store = extension(Redux.createStore)(Redux.combineReducers(reducers));
     Object.defineProperty(store, 'state', { get: () => store.getState() });
     store.subscribe(listener);
     listener();
@@ -44,6 +45,13 @@ export const doDispatch = (action, args) => {
     log.trace('new state', store.state);
 };
 
+/** The default dispatcher that simply passes args as the new state.
+**/
+export const action = {
+    dispatcher: (component, anAction, args) =>
+        doDispatch(anAction, {}, args),
+};
+
 /** Generic Dispatch function to return a function that dispatches any action.
     Defaults to dispatching a standard action if no additional details provided
 **/
@@ -54,19 +62,15 @@ export const dispatch = (_action, fn = action) => {
         : dispatcher.bind(null, null, _action, ...args);
 };
 
-/** The default dispatcher that simply passes args as the new state.
-**/
-export const action = {
-    dispatcher: (component, action, args) =>
-        doDispatch(action, {}, args),
-};
-
 /** A dispatcher that receives an event in args and passes on its value.
  *  Designed to use with text input boxes.
 **/
 export const event = {
-    dispatcher: (component, action, event) =>
-        doDispatch(action, { id: event.target.id, value: event.target.value }),
+    dispatcher: (component, anAction, anEvent) =>
+        doDispatch(
+            anAction,
+            { id: anEvent.target.id, value: anEvent.target.value }
+        ),
 };
 
 /** A dispatcher that receives a HTTP response in args and passes on the
@@ -74,11 +78,11 @@ export const event = {
  *  Designed to use with HHTP request library, i.e. superagent.
 **/
 export const resource = {
-    dispatcher: (component, action, error, response) =>
-        doDispatch(action, { ...response.body, error, response }),
+    dispatcher: (component, anAction, error, response) =>
+        doDispatch(anAction, { ...response.body, error, response }),
 };
 
 export const recharts = {
-    dispatcher: (component, action, entry, index, event) =>
-        doDispatch(action, entry),
+    dispatcher: (component, anAction, entry /* , index, event */) =>
+        doDispatch(anAction, entry),
 };

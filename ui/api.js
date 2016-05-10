@@ -3,7 +3,6 @@
 import React from 'react';
 import * as ui from './index';
 import { i, dispatch, event } from 'reframed/index';
-import * as actions from 'reframed/actions';
 
 export class API {
     static Input({ model, id }) {

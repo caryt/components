@@ -2,12 +2,14 @@ import React from 'react';
 import { dispatch } from 'reframed/index';
 
 export class Component extends React.Component {
+    /* eslint-disable no-unused-vars, no-shadow */
     delay(duration, fn, ...args) {
         return (duration > 0)
             ? (...args) =>
                 window.setTimeout(fn, duration, ...args)
             : fn;
     }
+    /* eslint-enable */
 
     then(action, completed, dispatcher) {
         if (action && action.type && completed && this.isMatch(completed)) {

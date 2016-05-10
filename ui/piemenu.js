@@ -5,6 +5,7 @@ const toggleVisible = flag => (
     (flag === 'show') ? 'hide' : 'show'
 );
 
+/* eslint-disable no-shadow */
 const label = ({ x, y, label }) =>
     <text fontFamily="Arial" x={x} y={y}> {label} </text>;
 
@@ -33,8 +34,9 @@ export class PieValue extends React.Component {
         const { Menu, value } = this.props;
         const { menuVisible } = this.state;
         const { toggleMenu, selectMenu } = this;
+        const onClick = toggleMenu.bind(this);
         return <div className="pie-value">
-            <span className="value" onClick={toggleMenu.bind(this)}>
+            <span className="value" onClick={onClick}>
                 {value}
             </span>
             {React.cloneElement(

@@ -12,6 +12,7 @@ const plural = (str, count) => (
     (count === 1) ? str : `${str}s`
 );
 
+/* eslint-disable no-console */
 export class ConsoleReporter {
     constructor({
       onComplete = (() => null), timer = noopTimer, groupResults = false } = {}
@@ -29,15 +30,17 @@ export class ConsoleReporter {
         this.specs = 0;
         this.pending = 0;
         this.failures = 0;
-        (this.groupResults)
-            ? console.groupCollapsed('Testing Application...')
-            : console.group('Testing Application...');
+        if (this.groupResults) {
+            console.groupCollapsed('Testing Application...');
+        } else {
+            console.group('Testing Application...');
+        }
         this.timer.start();
     }
 
     jasmineDone() {
         this.failedSpecs.forEach(spec =>
-            specFailureDetails(spec)
+            specFailureDetails(spec) // eslint-disable-line no-undef
         );
         let specs = '';
         specs += `${this.specs} ${plural('spec', this.specs)} `;
@@ -91,3 +94,4 @@ export class ConsoleReporter {
         }
     }
 }
+/* eslint-enable */
