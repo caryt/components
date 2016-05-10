@@ -1,28 +1,26 @@
 import React from 'react';
-import { Router, doDispatch, createStore, config, logger, forEach }
+import { Application } from 'reframed/core/application';
+import { Router, doDispatch, createStore, config, forEach }
     from 'reframed/index';
-const log = logger('app');
 
 /** React uses synthetic events, change events on input boxes actually
  *  listen for this event, not $.trigger('change')
  **/
 const event = new Event('input', { bubbles: true });
 
-export class Application {
-    constructor(options) {
+export class ReduxApplication extends Application {
+    initialize(options) {
         config.state = options.config;
-        this.name = options.name || 'application';
         this.reducers = options.reducers || {};
         this.routes = options.routes || [];
         forEach(options.actions, (key, value) => {
             this[key] = value;
         });
-        log.info(`initialize application ${this.name}`, this);
     }
 
     run() {
-        const { reducers, name, listener } = this;
-        log.info(`run application ${name}`, this);
+        super.run();
+        const { reducers, listener } = this;
         createStore({ reducers, listener: listener.bind(this) });
     }
 

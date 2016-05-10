@@ -1,9 +1,9 @@
 /** Internationization (i18n) helpers
 **/
-import Jed from 'jed';
+import Jed from 'jed'; // eslint-disable-line import/no-unresolved
 // We need this directly from the external config definition,
 import * as CONFIG from 'config/environment';
-import { logger } from 'reframed/index';
+import { logger } from './logger';
 const log = logger('i18n');
 
 /** i18n definition object
