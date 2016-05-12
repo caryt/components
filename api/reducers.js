@@ -5,7 +5,6 @@ import {
     LIST, POPULATE, // CRUD methods for a List
     NONE,
 } from 'reframed/actions';
-import { filter } from 'reframed/index';
 
 function get(url, keys, completed) {
     const result = url.get(keys)
@@ -78,22 +77,6 @@ function strategy(model, action) {
     }
 }
 
-/** Helper function to spread response fields in custom CHANGE reducers.
- *  If the CHANGE action has an error, it returns initial values
- * otherwise it returns values from the response -- both filtered by FIELDS
- * the next action is set to a null action (to prevent an infinite loop)
- * and any error is propogated to the result.
-**/
-function spread(state, action) {
-    const source = (action.error) ? state : action;
-    const keys = Object.keys(state);
-    return {
-        ...filter(source, field => keys.indexOf(field) > -1),
-        action: NONE,
-        error: action.error,
-    };
-}
-
 export function models(state = null, action) {
     const model = state ? state[action.model] : null;
     let newModel;
@@ -101,7 +84,7 @@ export function models(state = null, action) {
     case CHANGE_MODEL.type:
         newModel = {
             ...model,
-            ...spread(model.INITIAL_STATE, action),
+            ...model.spread(action),
         };
         break;
     case CHANGE_FIELD.type:

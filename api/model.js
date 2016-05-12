@@ -74,6 +74,22 @@ class BaseModel {
             fields.indexOf(key) > -1 && ignore.indexOf(key) === -1
         );
     }
+
+    /** Helper function to spread response fields in custom CHANGE reducers.
+     *  If the CHANGE action has an error, it returns initial values
+     * otherwise it returns values from the response -- both filtered by FIELDS
+     * the next action is set to a null action (to prevent an infinite loop)
+     * and any error is propogated to the result.
+    **/
+    spread(action) {
+        const source = (action.error) ? this.INITIAL_STATE : action;
+        const keys = Object.keys(this.INITIAL_STATE);
+        return {
+            ...filter(source, field => keys.indexOf(field) > -1),
+            action: actions.NONE,
+            error: action.error,
+        };
+    }
 }
 
 /* A Model encapsulates Business Logic and are typically used in reducers that

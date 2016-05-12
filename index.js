@@ -15,5 +15,3 @@ export * from './script';
 export * from './store';
 export * from './url';
 export * from './validators';
-
-export { spread } from './api/reducers';
