@@ -21,6 +21,7 @@ export class CollectionPlusJSON extends Model {
             options.data.forEach(value => {
                 this[value.name] = value.value;
             });
+            this.href = options.href; // TODO - This may cause a name clash!
         }
     }
 
