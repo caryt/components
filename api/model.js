@@ -117,16 +117,12 @@ export class Model extends BaseModel {
         this.CHANGE_FIELD = actions.create('CHANGE_FIELD', this);
         this.LIST = actions.create('LIST', this);
         this.POPULATE = actions.create('POPULATE', this);
+        this.RELIST = this.createNavigation(this.ROUTE);
     }
 
     createNavigation(path) {
         return { ...actions.NAVIGATE_MODEL, path };
     }
-
-    get RELIST() {
-        return this.createNavigation(this.ROUTE);
-    }
-
 }
 
 /** A Page provides some helper methods to construct pages that display Models
@@ -147,7 +143,7 @@ export class Page extends React.Component {
         // FIXME - mounting it and triggering componentDidMount which executes a list().
         // FIXME - Adding navigates to the same page (the add URL is page?add) so we need
         // FIXME - to manually trigger the list() - which we do here. Yuck!
-        if (this.model.action.type === 'HTTP_POST') {
+        if (this.model.action.type === actions.HTTP_POST.type) {
             this.list();
         }
     }
