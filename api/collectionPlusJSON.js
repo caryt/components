@@ -41,18 +41,20 @@ export class CollectionPlusJSON extends Model {
         // individual items are represented as a collection with one item
         const source = action.collection.items[0];
         const keys = Object.keys(this.INITIAL_STATE);
-        return {
-            // Iterate over the [{name: 'name', value: value}, ...] array
-            // returning a mapping of the relevant {name: value, ...} fields.
-            ...source.data.reduce((res, data) => {
-                if (keys.indexOf(data.name) > -1) {
-                    res[data.name] = data.value; // eslint-disable-line no-param-reassign
-                }
-                return res;
-            }, {}),
+        return (source)
+            ? {
+                // Iterate over the [{name: 'name', value: value}, ...] array
+                // returning a mapping of the relevant {name: value, ...} fields.
+                ...source.data.reduce((res, data) => {
+                    if (keys.indexOf(data.name) > -1) {
+                        res[data.name] = data.value; // eslint-disable-line no-param-reassign
+                    }
+                    return res;
+                }, {}),
 
-            action: actions.NONE,
-            error: action.error,
-        };
+                action: actions.NONE,
+                error: action.error,
+            }
+            : super.spread(action);
     }
 }

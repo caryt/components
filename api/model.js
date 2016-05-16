@@ -144,4 +144,8 @@ export class Page extends React.Component {
     render() {
         return null;
     }
+
+    get isAdding() {
+        return ('add' in this.props.location.query);
+    }
 }
