@@ -69,7 +69,7 @@ class BaseModel {
 
     get FIELDS() {
         const fields = Object.keys(this.INITIAL_STATE);
-        const ignore = ['models', 'action'];
+        const ignore = ['models', 'action', 'validations'];
         return filter(this, key =>
             fields.indexOf(key) > -1 && ignore.indexOf(key) === -1
         );
