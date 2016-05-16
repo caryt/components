@@ -28,6 +28,10 @@ class BaseModel {
         };
     }
 
+    get QUERY_ADD() {
+        return 'add';
+    }
+
     /** LABELS defines the display labels for all fields in the model.
      *  This method must be overridden in subclasses.
     **/
@@ -118,6 +122,11 @@ export class Model extends BaseModel {
     createNavigation(path) {
         return { ...actions.NAVIGATE_MODEL, path };
     }
+
+    get RELIST() {
+        return this.createNavigation(this.ROUTE);
+    }
+
 }
 
 /** A Page provides some helper methods to construct pages that display Models
@@ -126,6 +135,21 @@ export class Page extends React.Component {
     componentWillMount() {
         const ModelClass = this.constructor.MODEL;
         store.state.models = { [ModelClass.name]: new ModelClass() };
+    }
+
+    componentDidMount() {
+        this.list();
+    }
+
+    componentDidUpdate() {
+        // FIXME - This is a horrible hack.
+        // FIXME - When deleting or updating a record we RELIST which navigates to the page
+        // FIXME - mounting it and triggering componentDidMount which executes a list().
+        // FIXME - Adding navigates to the same page (the add URL is page?add) so we need
+        // FIXME - to manually trigger the list() - which we do here. Yuck!
+        if (this.model.action.type === 'HTTP_POST') {
+            this.list();
+        }
     }
 
     get model() {
@@ -141,11 +165,13 @@ export class Page extends React.Component {
         doDispatch(this.model.READ, { action, value: this.props.params.id });
     }
 
-    render() {
-        return null;
+    get isAdding() {
+        return (this.model.QUERY_ADD in this.props.location.query);
     }
 
-    get isAdding() {
-        return ('add' in this.props.location.query);
+    render() {
+        return (this.isAdding)
+            ? this.DETAIL.render()
+            : null;
     }
 }

@@ -15,7 +15,8 @@ export class API {
     /** Navigate from List to new Item page.
     **/
     static Add({ model }) {
-        const action = dispatch(model.createNavigation('/users?add'));
+        const url = `${model.ROUTE}?${model.QUERY_ADD}`;
+        const action = dispatch(model.createNavigation(url));
         return <ui.Button className="btn-primary" onClick={action}>
             {i`Add`}
         </ui.Button>;
