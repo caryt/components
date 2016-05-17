@@ -109,6 +109,7 @@ export class Model extends BaseModel {
         this.HTTP_PUT = actions.create('HTTP_PUT', this);
         this.HTTP_POST = actions.create('HTTP_POST', this);
         this.HTTP_DELETE = actions.create('HTTP_DELETE', this);
+        this.HTTP_LINK = actions.create('HTTP_LINK', this);
         this.CREATE = actions.create('CREATE', this);
         this.READ = actions.create('READ', this);
         this.UPDATE = actions.create('UPDATE', this);
@@ -116,8 +117,33 @@ export class Model extends BaseModel {
         this.CHANGE_MODEL = actions.create('CHANGE_MODEL', this);
         this.CHANGE_FIELD = actions.create('CHANGE_FIELD', this);
         this.LIST = actions.create('LIST', this);
+        this.LINK = actions.create('LINK', this);
         this.POPULATE = actions.create('POPULATE', this);
         this.RELIST = this.createNavigation(this.ROUTE);
+    }
+
+    /** Returns a new VIEW_LINK action for `rel`.
+     *  This can be dispatched to trigger a link in a Collection+JSON object
+    **/
+    static viewLinkAction(rel) {
+        return {
+            ...actions.create(actions.VIEW_LINK.type, this),
+            rel,
+        };
+    }
+
+    /** Returns a new LINK action for a `rel`.
+     *  This is used internally when dispatching a VIEW_LINK action.
+     * It finds the link in the Collection+JSON links collection and includes
+     * its URL in the LINK action.
+    **/
+    linkAction(rel) {
+        const link = this.links.find(item => item.rel === rel);
+        return {
+            ...actions.LINK,
+            rel,
+            href: (link) ? link.href : undefined,
+        };
     }
 
     createNavigation(path) {

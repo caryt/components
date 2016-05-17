@@ -5,6 +5,7 @@ export const HTTP_POST = { type: 'HTTP_POST' };
 export const HTTP_GET = { type: 'HTTP_GET' };
 export const HTTP_PUT = { type: 'HTTP_PUT' };
 export const HTTP_DELETE = { type: 'HTTP_DELETE' };
+export const HTTP_LINK = { type: 'HTTP_LINK' };
 
 export const CREATE = { type: 'CREATE' };
 export const READ = { type: 'READ' };
@@ -14,12 +15,15 @@ export const DELETE = { type: 'DELETE' };
 export const CHANGE_MODEL = { type: 'CHANGE_MODEL' };
 export const CHANGE_FIELD = { type: 'CHANGE_FIELD' };
 export const NAVIGATE_MODEL = { type: 'NAVIGATE_MODEL' };
+export const VIEW_LINK = { type: 'VIEW_LINK' };
 
 export const LIST = { type: 'LIST' };
+export const LINK = { type: 'LINK' };
 export const POPULATE = { type: 'POPULATE' };
 
 /** Create and return a new action for a model **/
-export const create = (type, model) => (
-    { type, model: model.constructor.name }
-);
+export const create = (type, model) => ({
+    type,
+    model: (typeof model === 'function') ? model.name : model.constructor.name,
+});
 

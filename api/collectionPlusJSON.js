@@ -26,6 +26,7 @@ export class CollectionPlusJSON extends Model {
     }
 
     reviveList(models) {
+        this.links = models.collection.links;
         // the actual items in Collection+JSON are in models.collection.items
         // as opposed to the superclass `Model` which simply uses
         // a plain {name: value, ...} mapping

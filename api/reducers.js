@@ -3,8 +3,10 @@ import {
     CREATE, READ, UPDATE, DELETE, // CRUD methods for a Model
     CHANGE_MODEL, CHANGE_FIELD,
     LIST, POPULATE, // CRUD methods for a List
+    VIEW_LINK, LINK, HTTP_LINK,
     NONE,
 } from 'reframed/actions';
+import { URL } from 'reframed/index';
 
 function get(url, keys, completed) {
     const result = url.get(keys)
@@ -37,7 +39,7 @@ function del(url, keys, completed) {
 }
 
 export function rest(state = {}, action) {
-    const { url, completed, resource } = state;
+    const { url, base, completed, resource } = state;
     switch (action.type) {
     case HTTP_POST.type:
         return post(url, resource.FIELDS, completed);
@@ -47,6 +49,8 @@ export function rest(state = {}, action) {
         return put(url, resource.FIELDS, completed);
     case HTTP_DELETE.type:
         return del(url, resource, completed);
+    case HTTP_LINK.type:
+        return get(base.addPath(action.href), resource, completed);
     default:
         return state;
     }
@@ -72,6 +76,8 @@ function strategy(model, action) {
         return { action: model.HTTP_GET, completed: model.POPULATE };
     case POPULATE.type:
         return { action: NONE };
+    case LINK.type:
+        return { action: { ...action, ...HTTP_LINK }, completed: model.POPULATE };
     default:
         return { action: NONE };
     }
@@ -132,6 +138,12 @@ export function models(state = null, action) {
             models: model.reviveList(action.response.body),
             error: action.error,
             ...strategy(model, POPULATE),
+        };
+        break;
+    case VIEW_LINK.type:
+        newModel = {
+            ...model.INITIAL_STATE,
+            ...strategy(model, model.linkAction(action.rel)),
         };
         break;
     default:

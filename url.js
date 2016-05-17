@@ -22,7 +22,9 @@ export class URL {
      *  @example person = base.addPath({id}) => `person/{id}`)
     **/
     addPath(path) {
-        return new URL(keys => [this.url(), path(keys)].join('/'));
+        return (typeof path === 'function')
+            ? new URL(keys => [this.url(), path(keys)].join(''))
+            : new URL([this.url(), path].join(''));
     }
 
     /** GET's the resource at this URL.

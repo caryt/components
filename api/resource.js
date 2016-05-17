@@ -32,7 +32,7 @@ export const Resource = ({ id, base, endpoint, resource }) =>
     <APIResource
       id={id}
       reducer={rest}
-      state={{ url: base.addPath(endpoint), resource, ...resource }}
+      state={{ url: base.addPath(endpoint), base, resource, ...resource }}
       dispatcher={resourceDispatcher}
       duration={config.MOCK_NETWORK_DELAY}
     />;
