@@ -1,4 +1,5 @@
 import React from 'react';
+import { dispatch } from 'reframed/index';
 
 const hasActive = active => (
     active ? 'active' : ''
@@ -13,24 +14,24 @@ export const Tabs = ({ children }) =>
         {children}
     </ul>;
 
-export const Tab = ({ children, id, tab, active, className = '' }) => {
-    const isActive = tab ? (tab === id) : active;
-    const classes = `${hasActive(isActive)} ${className}`;
-    return <li role="presentation" className={classes}>
-        <a href={`#${id}`} aria-controls={id} role="tab" data-toggle="tab">
-            {children}
-        </a>
-    </li>;
-};
-
-export const TabLink = ({
-    children, Link, id, tab, active, className = '',
+export const Tab = ({
+    children, id, tab, active, Link = null, action = null, className = '',
 }) => {
     const isActive = tab ? (tab === id) : active;
     const classes = `${hasActive(isActive)} ${className}`;
-    return <li role="presentation" className={classes}>
-        <Link tab={id} name={children} />
-    </li>;
+    let item;
+    if (Link) {
+        item = <Link tab={id} name={children} />;
+    } else if (action) {
+        item = <a href={`#${id}`} onClick={dispatch(action)} aria-controls={id} role="tab" data-toggle="tab">
+            {children}
+        </a>;
+    } else {
+        item = <a href={`#${id}`} aria-controls={id} role="tab" data-toggle="tab">
+            {children}
+        </a>;
+    }
+    return <li role="presentation" className={classes}>{item}</li>;
 };
 
 export const Panels = ({ children }) =>
