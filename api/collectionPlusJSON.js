@@ -25,6 +25,39 @@ export class CollectionPlusJSON extends Model {
         }
     }
 
+    /** Returns a new VIEW_LINK action for `rel`.
+     *  This can be dispatched to trigger a link in a Collection+JSON object
+    **/
+    static viewLinkAction(rel) {
+        return {
+            ...actions.create(actions.VIEW_LINK.type, this),
+            rel,
+        };
+    }
+
+    /** Returns a new LIST action.
+     *  This is the default action for a Collection+JSON object
+    **/
+    static get listAction() {
+        return {
+            ...actions.create(actions.LIST.type, this),
+        };
+    }
+
+    /** Returns a new LINK action for a `rel`.
+     *  This is used internally when dispatching a VIEW_LINK action.
+     * It finds the link in the Collection+JSON links collection and includes
+     * its URL in the LINK action.
+    **/
+    linkAction(rel) {
+        const link = this.links.find(item => item.rel === rel);
+        return {
+            ...actions.LINK,
+            rel,
+            href: (link) ? link.href : undefined,
+        };
+    }
+
     reviveList(models) {
         this.links = models.collection.links;
         // the actual items in Collection+JSON are in models.collection.items
