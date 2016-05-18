@@ -1,82 +1,52 @@
-import React from 'react';
+import { BaseModel } from './base_model';
 import * as actions from 'reframed/actions';
-import {
-  forEach, filter,
-  store, doDispatch, action,
-  validationMessages, isValid,
-} from 'reframed/index';
+import { filter } from 'reframed/index';
 
-/* A BaseModel encapsulates Business Logic.
+/* A Model encapsulates Business Logic and are typically used in reducers that
+ * return state from an external API.
+ *
  * Subclass and add getter functions to calculate derived fields.
+ * Reducers will return Model instances rather than simple mappings.
 **/
-
-class BaseModel {
-    constructor(options) {
-        const props = options || this.INITIAL_STATE;
-        forEach(props, (key, value) => { this[key] = value; });
+export class Model extends BaseModel {
+    constructor(...args) {
+        super(...args);
+        this.CREATE = actions.create('CREATE', this);
+        this.READ = actions.create('READ', this);
+        this.UPDATE = actions.create('UPDATE', this);
+        this.DELETE = actions.create('DELETE', this);
+        this.CHANGE_MODEL = actions.create('CHANGE_MODEL', this);
+        this.CHANGE_FIELD = actions.create('CHANGE_FIELD', this);
+        this.LIST = actions.create('LIST', this);
+        this.POPULATE = actions.create('POPULATE', this);
+        this.RELIST = this.createNavigation(this.ROUTE);
     }
 
-    /** INITIAL_STATE defines the inital values for all fields in the model.
-     *  This method must be extended in subclasses.
+    createNavigation(path) {
+        return { ...actions.NAVIGATE_MODEL, path };
+    }
+
+    /** strategy defines the state transitions for each action in the Model.
+     *  As these are async actions there is a next action and then
+     *  a subsequent action to be called on completion of the action.
+     *
+     *  This method is solely to isolate this logic into a single place :-)
     **/
-    get INITIAL_STATE() {
-        return {
-            id: '',
-            models: [],
-            action: actions.NONE,
-            validations: [],
-        };
-    }
-
-    get QUERY_ADD() {
-        return 'add';
-    }
-
-    /** LABELS defines the display labels for all fields in the model.
-     *  This method must be overridden in subclasses.
-    **/
-    get LABELS() {
-        return {};
-    }
-
-    /** SCHEMA defines the validations applied to each field in the model.
-     *  This method must be overridden in subclasses.
-    **/
-    get SCHEMA() {
-        return {};
-    }
-
-    /** Returns `true` if this is a new model, i.e. one that is being created
-     *  and hasn't yet been saved to the server.
-    **/
-    get isNew() {
-        return (this.id === '');
-    }
-
-    get isValid() {
-        return isValid(this);
-    }
-
-    get validationMessages() {
-        return validationMessages(this);
-    }
-
-    revive(state) {
-        return {
-            [this.constructor.name]: new this.constructor(state),
-        };
-    }
-
-    reviveList(models) {
-        return models.map(model => new this.constructor(model));
-    }
-
-    get FIELDS() {
-        const fields = Object.keys(this.INITIAL_STATE);
-        const ignore = ['models', 'action', 'validations'];
-        return filter(this, key =>
-            fields.indexOf(key) > -1 && ignore.indexOf(key) === -1
-        );
+    strategy(action) {
+        switch (action.type) {
+        case actions.CREATE.type:
+            return { action: actions.HTTP_POST, completed: this.RELIST };
+        case actions.READ.type:
+            return { action: actions.HTTP_GET, completed: this.CHANGE_MODEL };
+        case actions.UPDATE.type:
+            return { action: actions.HTTP_PUT, completed: this.RELIST };
+        case actions.DELETE.type:
+            return { action: actions.HTTP_DELETE, completed: this.RELIST };
+        case actions.LIST.type:
+            return { action: actions.HTTP_GET, completed: this.POPULATE };
+        default:
+            return { action: actions.NONE };
+        }
     }
 
     /** Helper function to spread response fields in custom CHANGE reducers.
@@ -93,83 +63,5 @@ class BaseModel {
             action: actions.NONE,
             error: action.error,
         };
-    }
-}
-
-/* A Model encapsulates Business Logic and are typically used in reducers that
- * return state from an external API.
- *
- * Subclass and add getter functions to calculate derived fields.
- * Reducers will return Model instances rather than simple mappings.
-**/
-export class Model extends BaseModel {
-    constructor(...args) {
-        super(...args);
-        this.HTTP_GET = actions.create('HTTP_GET', this);
-        this.HTTP_PUT = actions.create('HTTP_PUT', this);
-        this.HTTP_POST = actions.create('HTTP_POST', this);
-        this.HTTP_DELETE = actions.create('HTTP_DELETE', this);
-        this.HTTP_LINK = actions.create('HTTP_LINK', this);
-        this.CREATE = actions.create('CREATE', this);
-        this.READ = actions.create('READ', this);
-        this.UPDATE = actions.create('UPDATE', this);
-        this.DELETE = actions.create('DELETE', this);
-        this.CHANGE_MODEL = actions.create('CHANGE_MODEL', this);
-        this.CHANGE_FIELD = actions.create('CHANGE_FIELD', this);
-        this.LIST = actions.create('LIST', this);
-        this.LINK = actions.create('LINK', this);
-        this.POPULATE = actions.create('POPULATE', this);
-        this.RELIST = this.createNavigation(this.ROUTE);
-    }
-
-    createNavigation(path) {
-        return { ...actions.NAVIGATE_MODEL, path };
-    }
-}
-
-/** A Page provides some helper methods to construct pages that display Models
-**/
-export class Page extends React.Component {
-    componentWillMount() {
-        const ModelClass = this.constructor.MODEL;
-        store.state.models = { [ModelClass.name]: new ModelClass() };
-    }
-
-    componentDidMount() {
-        this.list();
-    }
-
-    componentDidUpdate() {
-        // FIXME - This is a horrible hack.
-        // FIXME - When deleting or updating a record we RELIST which navigates to the page
-        // FIXME - mounting it and triggering componentDidMount which executes a list().
-        // FIXME - Adding navigates to the same page (the add URL is page?add) so we need
-        // FIXME - to manually trigger the list() - which we do here. Yuck!
-        if (this.model.action.type === actions.HTTP_POST.type) {
-            this.list();
-        }
-    }
-
-    get model() {
-        const ModelClass = this.constructor.MODEL;
-        return store.state.models[ModelClass.name];
-    }
-
-    list() {
-        doDispatch(this.model.LIST, action);
-    }
-
-    read() {
-        doDispatch(this.model.READ, { action, value: this.props.params.id });
-    }
-
-    get isAdding() {
-        return (this.model.QUERY_ADD in this.props.location.query);
-    }
-
-    render() {
-        return (this.isAdding)
-            ? this.DETAIL.render()
-            : null;
     }
 }

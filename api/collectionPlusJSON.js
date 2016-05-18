@@ -16,6 +16,7 @@ import * as actions from 'reframed/actions';
 export class CollectionPlusJSON extends Model {
     constructor(options) {
         super(options);
+        this.LINK = actions.create('LINK', this);
         if (options && options.data) {
             // options has `data` attribute: [{name: 'name', value: value},...]
             options.data.forEach(value => {
@@ -28,7 +29,7 @@ export class CollectionPlusJSON extends Model {
     /** Returns a new VIEW_LINK action for `rel`.
      *  This can be dispatched to trigger a link in a Collection+JSON object
     **/
-    static viewLinkAction(rel) {
+    static viewLink(rel) {
         return {
             ...actions.create(actions.VIEW_LINK.type, this),
             rel,
@@ -38,33 +39,34 @@ export class CollectionPlusJSON extends Model {
     /** Returns a new LIST action.
      *  This is the default action for a Collection+JSON object
     **/
-    static get listAction() {
-        return {
-            ...actions.create(actions.LIST.type, this),
-        };
+    static get LIST() {
+        return actions.create(actions.LIST.type, this);
     }
 
-    /** Returns a new LINK action for a `rel`.
-     *  This is used internally when dispatching a VIEW_LINK action.
-     * It finds the link in the Collection+JSON links collection and includes
-     * its URL in the LINK action.
-    **/
-    linkAction(rel) {
-        const link = this.links.find(item => item.rel === rel);
-        return {
-            ...actions.LINK,
-            rel,
-            href: (link) ? link.href : undefined,
-        };
+    href(rel) {
+        const link = this.links && this.links.find(item => item.rel === rel);
+        return (link) ? link.href : undefined;
     }
 
-    reviveList(models) {
-        this.links = models.collection.links;
-        // the actual items in Collection+JSON are in models.collection.items
-        // as opposed to the superclass `Model` which simply uses
-        // a plain {name: value, ...} mapping
-        const items = models.collection.items;
-        return items.map(item => new this.constructor(item));
+    strategy(action) {
+        switch (action.type) {
+        case actions.VIEW_LINK.type:
+            return {
+                action: {
+                    ...action,
+                    ...actions.HTTP_LINK,
+                    href: this.href(action.rel),
+                },
+                completed: this.POPULATE,
+            };
+        default:
+            return super.strategy(action);
+        }
+    }
+
+    reviveList({ collection }) {
+        this.links = collection.links;
+        return super.reviveList(collection.items);
     }
 
     spread(action) {
