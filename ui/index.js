@@ -16,5 +16,6 @@ export * from './loading';
 export * from './nav';
 export * from './page';
 export * from './piemenu';
+export * from './sliding_panel';
 export * from './table';
 export * from './tabs';

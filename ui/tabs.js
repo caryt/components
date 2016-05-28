@@ -23,7 +23,8 @@ export const Tab = ({
     if (Link) {
         item = <Link tab={id} name={children} />;
     } else if (action) {
-        item = <a href={`#${id}`} onClick={dispatch(action)} aria-controls={id} role="tab" data-toggle="tab">
+        const click = dispatch(action);
+        item = <a href={`#${id}`} onClick={click} aria-controls={id} role="tab" data-toggle="tab">
             {children}
         </a>;
     } else {
