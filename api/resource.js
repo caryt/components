@@ -8,7 +8,7 @@ class APIResource extends Async.Component {
     render() {
         const { id, state, dispatcher } = this.props;
         const { action, completed, resource } = state;
-        if (id === resource.constructor.name) {
+        if (resource && (resource.constructor.name === id)) {
             this.then(action, completed, dispatcher);
         }
         return super.render();

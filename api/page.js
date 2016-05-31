@@ -7,10 +7,12 @@ import * as actions from 'reframed/actions';
 export class Page extends React.Component {
     componentWillMount() {
         const ModelClass = this.constructor.MODEL;
-        if (!this.models) {
-            this.models = {};
+        if (store) {
+            if (!this.models) {
+                this.models = {};
+            }
+            this.models[ModelClass.name] = new ModelClass();
         }
-        this.models[ModelClass.name] = new ModelClass();
     }
 
     componentDidMount() {
@@ -29,11 +31,13 @@ export class Page extends React.Component {
     }
 
     get models() {
-        return store.state.models;
+        return store && store.state.models;
     }
 
     set models(value) {
-        store.state.models = value;
+        if (store) {
+            store.state.models = value;
+        }
     }
 
     get model() {
