@@ -28,11 +28,18 @@ class APIResource extends Async.Component {
  *  e.g. <Rest base={URL('example.com')} endpoint='id/{id}' completed=UPDATE resource={id:1}/>
  *  returns an object that can be used to perform RESTful operations on example.com/id/1.
 **/
-export const Resource = ({ id, base, endpoint, resource }) =>
+export const Resource = ({ id, base, endpoint, resource, authorization }) =>
     <APIResource
       id={id}
       reducer={rest}
-      state={{ url: base.addPath(endpoint), base, resource, ...resource }}
+      state={{
+          url: base.addPath(endpoint),
+          base,
+          resource,
+          authorization,
+          ...resource,
+      }}
       dispatcher={resourceDispatcher}
       duration={config.MOCK_NETWORK_DELAY}
+      authorization={authorization}
     />;

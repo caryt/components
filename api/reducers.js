@@ -1,19 +1,24 @@
 import * as actions from 'reframed/actions';
 import * as restful from './restful';
 
+// TODO - This is scaffolding until we develop a UI for Authentication (i.e. a login page)
+const TEMP_AUTHORIZATION =
+    '{"username":"demo@mediabankpam.com","clientId":"ddtest1","clientPassword":"au6rEpCH2Wt3P7L7"}';
+
 export function rest(state = {}, action) {
-    const { url, base, completed, resource } = state;
+    const { url, base, completed, resource, authorization } = state;
+    const args = [authorization, completed];
     switch (action.type) {
     case actions.HTTP_POST.type:
-        return restful.post(url, resource.FIELDS, completed);
+        return restful.post(url, resource.FIELDS, ...args);
     case actions.HTTP_GET.type:
-        return restful.get(url, resource, completed);
+        return restful.get(url, resource, ...args);
     case actions.HTTP_PUT.type:
-        return restful.put(url, resource.FIELDS, completed);
+        return restful.put(url, resource.FIELDS, ...args);
     case actions.HTTP_DELETE.type:
-        return restful.del(url, resource, completed);
+        return restful.del(url, resource, ...args);
     case actions.HTTP_LINK.type:
-        return restful.get(base.addPath(action.href), resource, completed);
+        return restful.get(base.addPath(action.href), resource, ...args);
     default:
         return state;
     }
@@ -62,4 +67,11 @@ export function models(state = null, action) {
         return { ...state, ...model.revive(newModel) };
     }
     return state;
+}
+
+export function authorization(state = TEMP_AUTHORIZATION, action) {
+    switch (action.type) {
+    default:
+        return state;
+    }
 }
