@@ -5,11 +5,12 @@ import * as ui from './index';
 import { i, dispatch, event } from 'reframed/index';
 
 export class API {
-    static Input({ model, id }) {
-        const action = dispatch(model.CHANGE_FIELD, event);
-        const lbl = model.LABELS[id];
-        const val = model[id];
-        return <ui.Input id={id} label={lbl} value={val} onChange={action} />;
+    static Input({ model, id, ...props }) {
+        const onChange = dispatch(model.CHANGE_FIELD, event);
+        const label = model.LABELS[id];
+        const value = model[id];
+        const newProps = { ...props, id, label, value, onChange };
+        return <ui.Input { ...newProps } />;
     }
 
     /** Navigate from List to new Item page.

@@ -1,10 +1,6 @@
 import * as actions from 'reframed/actions';
 import * as restful from './restful';
 
-// TODO - This is scaffolding until we develop a UI for Authentication (i.e. a login page)
-const TEMP_AUTHORIZATION =
-    '{"username":"demo@mediabankpam.com","clientId":"ddtest1","clientPassword":"au6rEpCH2Wt3P7L7"}';
-
 export function rest(state = {}, action) {
     const { url, base, completed, resource, authorization } = state;
     const args = [authorization, completed];
@@ -52,7 +48,9 @@ export function models(state = null, action) {
         case actions.POPULATE.type:
             return {
                 ...model,
-                models: model.reviveList(action.response.body),
+                models: (action.error)
+                    ? []
+                    : model.reviveList(action.response.body),
                 error: action.error,
                 ...model.strategy(action),
             };
@@ -67,11 +65,4 @@ export function models(state = null, action) {
         return { ...state, ...model.revive(newModel) };
     }
     return state;
-}
-
-export function authorization(state = TEMP_AUTHORIZATION, action) {
-    switch (action.type) {
-    default:
-        return state;
-    }
 }
