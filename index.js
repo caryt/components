@@ -8,6 +8,7 @@ export * from './router/router';
 export * from './ui/index';
 
 export * from './application';
+export * from './authorization';
 export * from './config';
 export * from './consoleReporter';
 export * from './functional';
