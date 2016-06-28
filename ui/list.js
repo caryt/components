@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from './table';
+import { hasPermission } from 'reframed/index';
 
 export const TabularList = ({ list, header, children, ...rest }) =>
     <Table className="list" header={header} {...rest}>
@@ -21,3 +22,9 @@ export const UnorderedList = ({ list, header, children, ...rest }) =>
             {list.map(child => children(child, header))}
         </ul>
     </div>;
+
+export const Li = ({ permission = null, ...props }) => (
+    (hasPermission(permission))
+        ? <li { ...props } />
+        : null
+    );

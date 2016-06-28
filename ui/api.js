@@ -2,7 +2,14 @@
 **/
 import React from 'react';
 import * as ui from './index';
-import { i, dispatch, event } from 'reframed/index';
+import { i, dispatch, event, hasPermission } from 'reframed/index';
+
+const CREATE = 'create';
+const UPDATE = 'update';
+const DELETE = 'delete';
+
+const ifPermitted = (operation, model) =>
+    model.permission && hasPermission(`${operation}_${model.permission}`);
 
 export class API {
     static Input({ model, id, ...props }) {
@@ -18,9 +25,11 @@ export class API {
     static Add({ model }) {
         const url = `${model.ROUTE}?${model.QUERY_ADD}`;
         const action = dispatch(model.createNavigation(url));
-        return <ui.Button className="btn-primary" onClick={action}>
-            {i`Add`}
-        </ui.Button>;
+        return (ifPermitted(CREATE, model))
+            ? <ui.Button className="btn-primary" onClick={action}>
+                {i`Add`}
+            </ui.Button>
+            : null;
     }
 
     /** Either:-
@@ -31,22 +40,24 @@ export class API {
         const action = (model.isNew)
             ? dispatch(model.CREATE)
             : dispatch(model.UPDATE);
-        return <ui.Button
-          className="btn-primary" onClick={action} disabled={!model.isValid}
-        >
-            {i`Save`}
-        </ui.Button>;
+        return (ifPermitted((model.isNew) ? CREATE : UPDATE, model))
+            ? <ui.Button
+              className="btn-primary" onClick={action} disabled={!model.isValid}
+            >
+                {i`Save`}
+            </ui.Button>
+            : null;
     }
 
     /** Delete a Model
     **/
     static Delete({ model }) {
         const action = dispatch(model.DELETE);
-        return (model.isNew)
-            ? null
-            : <ui.Button className="btn-danger" onClick={action}>
+        return (ifPermitted(DELETE, model) && !model.isNew)
+            ? <ui.Button className="btn-danger" onClick={action}>
                 {i`Delete`}
-            </ui.Button>;
+            </ui.Button>
+            : null;
     }
 
     static Label({ model, id }) {

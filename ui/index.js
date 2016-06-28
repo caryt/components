@@ -8,6 +8,7 @@ export * from './donut';
 export * from './error';
 export * from './forms';
 export * from './grid';
+export * from './headings';
 export * from './i18n';
 export * from './icon';
 export * from './link';

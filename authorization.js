@@ -36,8 +36,9 @@ export const addRolesAndPermissions = (appRoles, appPermissions) => {
 const roleIndex = role =>
     roles.findIndex(item => item === role);
 
-export const hasPermission = (permission) => {
+export const hasPermission = p => {
     const index = roleIndex(usersRole());
-    return (index > -1) && permission && (permissions[permission][index] === 'Y');
+    return (p === true) ||
+        ((index > -1) && p && (permissions[p][index] === 'Y'));
 };
 

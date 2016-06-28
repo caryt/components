@@ -1,5 +1,5 @@
 import React from 'react';
-import { dispatch } from 'reframed/index';
+import { dispatch, hasPermission } from 'reframed/index';
 
 const hasActive = active => (
     active ? 'active' : ''
@@ -15,8 +15,12 @@ export const Tabs = ({ children }) =>
     </ul>;
 
 export const Tab = ({
-    children, id, tab, active, Link = null, action = null, className = '',
+    children, id, tab, active,
+    Link = null, action = null, className = '', permission = null,
 }) => {
+    if (permission && !hasPermission(permission)) {
+        return null;
+    }
     const isActive = tab ? (tab === id) : active;
     const classes = `${hasActive(isActive)} ${className}`;
     let item;
