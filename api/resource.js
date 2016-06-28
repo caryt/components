@@ -2,7 +2,7 @@ import React from 'react';
 import * as Async from 'reframed/async/component';
 import { rest } from './reducers';
 import {
-    resource as resourceDispatcher, config, authorizationToken
+    resource as resourceDispatcher, config, authorizationToken,
 } from 'reframed/index';
 import * as actions from './actions';
 
@@ -31,7 +31,7 @@ class APIResource extends Async.Component {
  *  returns an object that can be used to perform RESTful operations on example.com/id/1.
 **/
 export const Resource =
-  ({ id, base, endpoint, resource, authorization = {} }) =>
+  ({ id, base, endpoint, resource }) =>
       <APIResource
         id={id}
         reducer={rest}
@@ -44,5 +44,4 @@ export const Resource =
         }}
         dispatcher={resourceDispatcher}
         duration={config.MOCK_NETWORK_DELAY}
-        authorization={authorization.token}
       />;
