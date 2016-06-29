@@ -20,8 +20,12 @@ export const checkAuthorization = (nextState, replace) => {
 export const usersRole = () => {
 	// WARNING: This doesn't verify the signature (as the front-end can't
 	// securely contain the signing secret).
-    const token = jwt_decode(authorizationToken());
-    return token && token.role;
+    try {
+        const token = jwt_decode(authorizationToken());
+        return token && token.role;
+    } catch (e) {
+        return null;
+    }
 };
 
 export let roles = [];
