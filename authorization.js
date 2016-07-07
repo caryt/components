@@ -7,8 +7,11 @@ export const setAuthorizationToken = token => {
     sessionStorage.token = token;
 };
 
-export const logout = () =>
-	setAuthorizationToken('');
+export const logout = nextState => {
+    setAuthorizationToken('');
+    nextState.history.replace('/login?redirect=%2f');
+    return null;
+};
 
 export const checkAuthorization = (nextState, replace) => {
     if (!authorizationToken()) {
@@ -17,16 +20,22 @@ export const checkAuthorization = (nextState, replace) => {
     }
 };
 
-export const usersRole = () => {
-	// WARNING: This doesn't verify the signature (as the front-end can't
-	// securely contain the signing secret).
+const token = field => {
+    // WARNING: This doesn't verify the signature (as the front-end can't
+    // securely contain the signing secret).
     try {
-        const token = jwt_decode(authorizationToken());
-        return token && token.role;
+        const decoded = jwt_decode(authorizationToken());
+        return decoded && decoded[field];
     } catch (e) {
         return null;
     }
 };
+
+export const usersRole = () =>
+    token('role');
+
+export const username = () =>
+    token('username');
 
 export let roles = [];
 
