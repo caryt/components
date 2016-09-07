@@ -78,7 +78,7 @@ export const event = {
  *  Designed to use with HHTP request library, i.e. superagent.
 **/
 export const resource = {
-    dispatcher: (component, anAction, error, response) =>
+    dispatcher: (component, anAction, error, response = {}) =>
         doDispatch(anAction, { ...response.body, error, response }),
 };
 
